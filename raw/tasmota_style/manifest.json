@@ -1,6 +1,6 @@
 {
   "name": "Tasmota Style",
-  "version": "0x01000005",
+  "version": "0x01000006",
   "description": "A modern theme for the Tasmota web UI",
   "author": "rmawatson@hotmail.com",
   "min_tasmota": "0x09040000",

@@ -945,8 +945,11 @@ div.zr {
     margin-top: 8px;
 }
 
+/* an input is as wide as 20 characters at least, with the button next to it that makes the card
+   wider than the column of the page. a width of 0 lets it grow to fill the row, from nothing */
 div.zr input,
 div.zr select {
+    width: 0;
     margin: 0;
 }
 
