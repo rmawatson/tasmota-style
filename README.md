@@ -85,9 +85,15 @@ Change them in Configuration > Tasmota Style Manager:
 - **Presets** sets all 20 colours at once: Charcoal, Midnight, Graphite, Ocean, Ember, Daylight, and Tasmota's own
   Tasmota dark and Tasmota light. If the colours you had before were not one of them, they are there as
   Before Tasmota Style. The preset in use is marked Current.
+- **Menu buttons** sets the style of the menu rows (Configuration, Information, ...): Accent edge, Tinted,
+  Solid, Icon tiles, Fade or Plain. Each takes its colours from the button colours, and Restart and Reset from
+  the reset button colours. The style is kept in `persist` as `tms_buttons`.
 - **Colours** shows the 20 colours with a colour picker each, Save sets them.
-- **Reset to defaults** sets the colours the theme starts with, the Charcoal preset, after asking to confirm.
+- **Reset to defaults** sets the colours and menu buttons the theme starts with, the Charcoal preset and Accent
+  edge, after asking to confirm.
   Tasmota's own default colours are the Tasmota dark preset.
+
+<img src="docs/images/menu_buttons.png" alt="The menu button styles" width="640">
 
 The `WebColor` command works too, `WebColor11 #1786e8` sets the button colour, and
 `WebColor {"WebColor":["#e6e7e9","#121314",...]}` all 20. The page shows the colours Tasmota has.
@@ -146,7 +152,9 @@ python3 scripts/gen_css.py   # builds raw/tasmota_style/tms.css from src/tms.css
 python3 scripts/gen.py       # builds extensions/tapp/tasmota_style.tapp and extensions/extensions.jsonl
 ```
 
-`src/tms.css` is the stylesheet, `icon(name)` in it is replaced by `src/icons/name.svg`. The icons are copied
+`src/tms.css` is the stylesheet, `icon(name)` in it is replaced by `src/icons/name.svg`. Each menu button style in
+`src/buttons` is built to its own file in the tapp, the extension adds the chosen one to the end of the stylesheet.
+The icons are copied
 from the `svgs` folder of Font Awesome Free 7.3.1. `scripts/upload.py` uploads a tapp to a device over FTP.
 
 ## Credits

@@ -107,6 +107,34 @@ class TmsPalette
     end
 end
 
+class TmsButtons
+    # the styles of the menu rows. Each is a file in the tapp, btn_<style>.css, added to the end of
+    # the stylesheet, Plain has none. The style in use is kept in persist
+
+    static var styles = [["edge", "Accent edge"], ["tinted", "Tinted"], ["solid", "Solid"], ["tiles", "Icon tiles"],
+                         ["fade", "Fade"], ["plain", "Plain"]]
+    static var default_style = "edge"
+
+    static def name(style)
+        for entry : _class.styles
+            if entry[0] == style
+                return entry[1]
+            end
+        end
+        return nil
+    end
+
+    static def current()
+        var style = persist.find("tms_buttons")
+        return _class.name(style) != nil ? style : _class.default_style
+    end
+
+    static def set(style)
+        persist.tms_buttons = style
+        persist.save()
+    end
+end
+
 class TmsManager
     # the Tasmota Style Manager page, from a button on the configuration page. It sets the colours
     # with the WebColor command, from a preset or one by one
@@ -142,6 +170,14 @@ class TmsManager
         end
         webserver.content_send("</form></fieldset><p></p>")
 
+        var buttons = TmsButtons.current()
+        webserver.content_send("<fieldset><legend><b>&nbsp;Menu buttons&nbsp;</b></legend><form method='post' action='tms' class='tsp'>")
+        for style : TmsButtons.styles
+            var mark = style[0] == buttons ? "<small>Current</small>" : ""
+            webserver.content_send(f"<button name='buttons' value='{style[0]}'><span class='tsb tsb-{style[0]}'></span>{style[1]}{mark}</button>")
+        end
+        webserver.content_send("</form></fieldset><p></p>")
+
         if colors != nil
             webserver.content_send("<fieldset><legend><b>&nbsp;Colours&nbsp;</b></legend><form method='post' action='tms'><div class='tsg'>")
             for index : 0..size(colors) - 1
@@ -150,7 +186,7 @@ class TmsManager
             webserver.content_send("</div><br><button name='save' class='button bgrn'>Save</button></form></fieldset>")
         end
         webserver.content_send("<p></p><form method='post' action='tms'><button name='reset' class='bred' "
-                               "onclick='return confirm(\"Set the colours back to the defaults?\")'>Reset to defaults</button></form>")
+                               "onclick='return confirm(\"Set the colours and menu buttons back to the defaults?\")'>Reset to defaults</button></form>")
         webserver.content_button(webserver.BUTTON_CONFIGURATION)
         webserver.content_button(webserver.BUTTON_MAIN)
         webserver.content_stop()
@@ -172,6 +208,8 @@ class TmsManager
                 self.message = self.apply_preset(webserver.arg("preset"))
             elif webserver.has_arg("save")
                 self.message = self.save_colors()
+            elif webserver.has_arg("buttons")
+                self.message = self.set_buttons(webserver.arg("buttons"))
             elif webserver.has_arg("reset")
                 self.message = self.reset_colors()
             end
@@ -198,12 +236,23 @@ class TmsManager
         return [f"{name} applied", true]
     end
 
-    # the colours the theme starts with
+    def set_buttons(style)
+        var name = TmsButtons.name(style)
+        if name == nil
+            return [f"There is no menu button style '{style}'", false]
+        end
+        TmsButtons.set(style)
+        return [f"Menu buttons: {name}", true]
+    end
+
+    # the colours and menu buttons the theme starts with
     def reset_colors()
+        TmsButtons.set(TmsButtons.default_style)
         if !TmsPalette.set_colors(TmsPalette.preset(TmsPalette.default_preset))
             return ["Unable to set the colours", false]
         end
-        return [f"Colours reset to the defaults ({TmsPalette.default_preset})", true]
+        var buttons = TmsButtons.name(TmsButtons.default_style)
+        return [f"Colours and menu buttons reset to the defaults ({TmsPalette.default_preset}, {buttons})", true]
     end
 
     def save_colors()
@@ -411,26 +460,37 @@ class TmsExtension
     # ---------------------------------------------------------------- stylesheet
 
     # the extension manager renames the tapp to .tapp_ when auto-run is turned off, and back
-    def open_css()
+    def open_file(name)
         var archives = [self.archive]
         if size(self.archive)
             archives.push(string.endswith(self.archive, "_") ? self.archive[0..-2] : self.archive + "_")
         end
         for archive : archives
             try
-                var css_file = open(size(archive) ? archive + "#tms.css" : "tms.css")
+                var opened = open(size(archive) ? archive + "#" + name : name)
                 self.archive = archive
-                return css_file
+                return opened
             except ..
             end
         end
         return nil
     end
 
-    # tasmota sends every response with no-cache, the stylesheet is sent on every page. The
-    # browser's own controls, and the shadows, follow the background colour, added at the end
+    def send_file(source)
+        while true
+            var chunk = source.read(self.chunk_size)
+            if !size(chunk)
+                break
+            end
+            webserver.content_send(chunk)
+        end
+    end
+
+    # tasmota sends every response with no-cache, the stylesheet is sent on every page. The style of
+    # the menu buttons, the browser's own controls and the shadows for a light background are added
+    # at the end
     def send_css()
-        var css_file = self.open_css()
+        var css_file = self.open_file("tms.css")
         if css_file == nil
             tasmota.log(f"TMS: unable to open tms.css in '{self.archive}'", 2)
             webserver.content_open(404, "text/plain")
@@ -440,12 +500,16 @@ class TmsExtension
         end
         webserver.content_open(200, "text/css")
         try
-            while true
-                var chunk = css_file.read(self.chunk_size)
-                if !size(chunk)
-                    break
+            self.send_file(css_file)
+            var buttons = TmsButtons.current()
+            if buttons != "plain"
+                var buttons_file = self.open_file(f"btn_{buttons}.css")
+                if buttons_file != nil
+                    self.send_file(buttons_file)
+                    buttons_file.close()
+                else
+                    tasmota.log(f"TMS: unable to open btn_{buttons}.css in '{self.archive}'", 2)
                 end
-                webserver.content_send(chunk)
             end
             var colors = TmsPalette.colors()
             if colors != nil && TmsPalette.light(colors[1])

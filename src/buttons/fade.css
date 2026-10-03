@@ -1,0 +1,22 @@
+/* Fade: a tint of the button colour on the left of each menu row fades to the form colour, of
+   the reset colour for Restart and Reset */
+
+p + form:not(.zt):not([method=post]) > button:last-child,
+a > button {
+    background: linear-gradient(90deg, color-mix(in srgb, var(--c_btn) 24%, var(--c_frm)), var(--c_frm) 75%);
+    border-color: color-mix(in srgb, var(--c_btn) 22%, var(--c_frm));
+}
+
+p + form:not(.zt):not([method=post]) > button:last-child:hover,
+a > button:hover {
+    background: linear-gradient(90deg, color-mix(in srgb, var(--c_btn) 34%, var(--c_frm)), var(--c_frm) 85%);
+}
+
+p + form:not(.zt):not([method=post]) > button.bred:last-child {
+    background: linear-gradient(90deg, color-mix(in srgb, var(--c_btnrst) 24%, var(--c_frm)), var(--c_frm) 75%);
+    border-color: color-mix(in srgb, var(--c_btnrst) 22%, var(--c_frm));
+}
+
+p + form:not(.zt):not([method=post]) > button.bred:last-child:hover {
+    background: linear-gradient(90deg, color-mix(in srgb, var(--c_btnrst) 34%, var(--c_frm)), var(--c_frm) 85%);
+}

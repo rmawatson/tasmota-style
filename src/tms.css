@@ -807,6 +807,33 @@ form.tsp small {
     color: var(--ts-accent2);
 }
 
+/* the menu button styles, with a small sample of each */
+form.tsp span.tsb {
+    width: 42px;
+    height: 22px;
+    background: var(--c_frm);
+}
+
+form.tsp span.tsb-edge {
+    background: linear-gradient(90deg, var(--c_btn) 3px, var(--c_frm) 3px);
+}
+
+form.tsp span.tsb-tinted {
+    background: color-mix(in srgb, var(--c_btn) 18%, var(--c_frm));
+}
+
+form.tsp span.tsb-solid {
+    background: var(--c_btn);
+}
+
+form.tsp span.tsb-tiles {
+    background: linear-gradient(var(--c_btn) 0 0) 5px 50% / 12px 12px no-repeat, var(--c_frm);
+}
+
+form.tsp span.tsb-fade {
+    background: linear-gradient(90deg, color-mix(in srgb, var(--c_btn) 45%, var(--c_frm)), var(--c_frm));
+}
+
 /* the colours, two to a row */
 div.tsg {
     display: grid;
