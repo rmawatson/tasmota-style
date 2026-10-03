@@ -385,6 +385,7 @@ button:disabled:hover {
 
 /* an icon in front of the text of a button, the icon is --i */
 button[name=save]::before,
+form[action=tms] button[name=reset]::before,
 form[action=u1] button::before,
 form[action^=u2] button::before,
 button[onclick*=zbj]::before,
@@ -402,6 +403,7 @@ form.zt[method=get] button::before {
 }
 
 button[name=save] { --i: icon(floppy-disk) }
+form[action=tms] button[name=reset] { --i: icon(rotate-left) }
 form[action=u1] button,
 form[action^=u2] button { --i: icon(arrow-up-from-bracket) }
 button[onclick*=zbj] { --i: icon(link) }

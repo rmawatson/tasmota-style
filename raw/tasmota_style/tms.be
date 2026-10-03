@@ -146,6 +146,8 @@ class TmsManager
             end
             webserver.content_send("</div><br><button name='save' class='button bgrn'>Save</button></form></fieldset>")
         end
+        webserver.content_send("<p></p><form method='post' action='tms'><button name='reset' class='bred' "
+                               "onclick='return confirm(\"Set the colours back to the defaults?\")'>Reset to defaults</button></form>")
         webserver.content_button(webserver.BUTTON_CONFIGURATION)
         webserver.content_button(webserver.BUTTON_MAIN)
         webserver.content_stop()
@@ -167,6 +169,8 @@ class TmsManager
                 self.message = self.apply_preset(webserver.arg("preset"))
             elif webserver.has_arg("save")
                 self.message = self.save_colors()
+            elif webserver.has_arg("reset")
+                self.message = self.reset_colors()
             end
         except .. as e, m
             self.message = [f"{e}, {m}", false]
@@ -189,6 +193,14 @@ class TmsManager
             return ["Unable to set the colours", false]
         end
         return [f"{name} applied", true]
+    end
+
+    # the colours the theme starts with
+    def reset_colors()
+        if !TmsPalette.set_colors(TmsPalette.preset(TmsPalette.default_preset))
+            return ["Unable to set the colours", false]
+        end
+        return [f"Colours reset to the defaults ({TmsPalette.default_preset})", true]
     end
 
     def save_colors()

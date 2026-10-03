@@ -82,6 +82,8 @@ Change them in Configuration > Tasmota Style Manager:
   Tasmota dark and Tasmota light. If the colours you had before were not one of them, they are there as
   Before Tasmota Style. The preset in use is marked Current.
 - **Colours** shows the 20 colours with a colour picker each, Save sets them.
+- **Reset to defaults** sets the colours the theme starts with, the Midnight preset, after asking to confirm.
+  Tasmota's own default colours are the Tasmota dark preset.
 
 The `WebColor` command works too, `WebColor11 #2563eb` sets the button colour, and
 `WebColor {"WebColor":["#e6edf3","#0b0f14",...]}` all 20. The page shows the colours Tasmota has.
