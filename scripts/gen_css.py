@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Stylesheet builder
-Builds raw/zigbee_style/zbs.css from src/zbs.css. Every icon(name) in the source is replaced
+Builds raw/tasmota_style/tms.css from src/tms.css. Every icon(name) in the source is replaced
 by var(--fa-name), and the icon itself, src/icons/name.svg, is added once to :root as a data
 url, so an icon used by several rules is only sent once. icon(name) has no colour, it is used
 as a mask, icon(name,#fff) is filled with the colour, to be used as a background. The result
@@ -12,9 +12,9 @@ import re
 import sys
 from pathlib import Path
 
-SOURCE = Path("src/zbs.css")
+SOURCE = Path("src/tms.css")
 ICONS = Path("src/icons")
-OUTPUT = Path("raw/zigbee_style/zbs.css")
+OUTPUT = Path("raw/tasmota_style/tms.css")
 
 ATTRIBUTION = ("/*! Icons: Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com "
                "License - https://fontawesome.com/license/free (Icons: CC BY 4.0) "

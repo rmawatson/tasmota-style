@@ -4,21 +4,23 @@
 import string
 import webserver
 
-class ZbsExtension
+class TmsExtension
     # Tasmota has no way to add a stylesheet to its pages, but it writes the WebCanvas setting
     # unescaped into the style of every page, as body{background:<WebCanvas> 0 0 / cover no-repeat fixed;}
     # The theme sets WebCanvas to the background tasmota would have used, followed by the end of
     # that style, a link to the stylesheet served from the tapp and the start of a style that takes
     # the rest of the line. The WebCanvas there was before is put back when the extension stops.
 
-    static var url = "/zbs.css"
-    static var link = "}</style><link rel=stylesheet href=/zbs.css><style>:root{--zbs:1"
-    static var link_start = "}</style><link rel=stylesheet href=/zbs.css>"
+    static var url = "/tms.css"
+    static var link = "}</style><link rel=stylesheet href=/tms.css><style>:root{--tms:1"
+    static var link_start = "}</style><link rel=stylesheet href=/tms.css>"
+    # the link of the test builds, named Zigbee Style, replaced when the theme is applied
+    static var old_link_starts = ["}</style><link rel=stylesheet href=/zbs.css>"]
     static var canvas_options = " 0 0 / cover no-repeat fixed"
     static var default_background = "var(--c_bg)"
     static var chunk_size = 2048
 
-    var archive         # the tapp the stylesheet is read from, ex: /.extensions/zigbee_style.tapp
+    var archive         # the tapp the stylesheet is read from, ex: /.extensions/tasmota_style.tapp
     var route_added
 
     def init()
@@ -41,7 +43,7 @@ class ZbsExtension
             try
                 webserver.remove_route(self.url, webserver.HTTP_GET)
             except .. as e, m
-                tasmota.log(f"ZBS: unable to remove {self.url} - {e} {m}", 2)
+                tasmota.log(f"TMS: unable to remove {self.url} - {e} {m}", 2)
             end
         end
         self.restore()
@@ -65,13 +67,24 @@ class ZbsExtension
         return str(result.find("WebCanvas", ""))
     end
 
+    # where the link starts in the canvas, or -1
+    static def link_position(canvas)
+        for link_start : [_class.link_start] + _class.old_link_starts
+            var position = string.find(canvas, link_start)
+            if position >= 0
+                return position
+            end
+        end
+        return -1
+    end
+
     static def themed(canvas)
-        return string.find(canvas, _class.link_start) >= 0
+        return _class.link_position(canvas) >= 0
     end
 
     # the WebCanvas that was set before the theme
     static def original(canvas)
-        var position = string.find(canvas, _class.link_start)
+        var position = _class.link_position(canvas)
         if position < 0
             return canvas
         end
@@ -104,10 +117,10 @@ class ZbsExtension
             return true
         end
         if !self.set_canvas(wanted)
-            tasmota.log("ZBS: unable to set WebCanvas, the settings have no room for it. The theme is not shown", 1)
+            tasmota.log("TMS: unable to set WebCanvas, the settings have no room for it. The theme is not shown", 1)
             return false
         end
-        tasmota.log("ZBS: theme applied", 2)
+        tasmota.log("TMS: theme applied", 2)
         return true
     end
 
@@ -117,10 +130,10 @@ class ZbsExtension
             return true
         end
         if !self.set_canvas(self.original(current))
-            tasmota.log("ZBS: unable to restore WebCanvas", 1)
+            tasmota.log("TMS: unable to restore WebCanvas", 1)
             return false
         end
-        tasmota.log("ZBS: theme removed", 2)
+        tasmota.log("TMS: theme removed", 2)
         return true
     end
 
@@ -134,7 +147,7 @@ class ZbsExtension
         end
         for archive : archives
             try
-                var css_file = open(size(archive) ? archive + "#zbs.css" : "zbs.css")
+                var css_file = open(size(archive) ? archive + "#tms.css" : "tms.css")
                 self.archive = archive
                 return css_file
             except ..
@@ -147,9 +160,9 @@ class ZbsExtension
     def send_css()
         var css_file = self.open_css()
         if css_file == nil
-            tasmota.log(f"ZBS: unable to open zbs.css in '{self.archive}'", 2)
+            tasmota.log(f"TMS: unable to open tms.css in '{self.archive}'", 2)
             webserver.content_open(404, "text/plain")
-            webserver.content_send("zbs.css not found")
+            webserver.content_send("tms.css not found")
             webserver.content_close()
             return
         end
@@ -163,11 +176,11 @@ class ZbsExtension
                 webserver.content_send(chunk)
             end
         except .. as e, m
-            tasmota.log(f"ZBS: unable to send zbs.css - {e} {m}", 2)
+            tasmota.log(f"TMS: unable to send tms.css - {e} {m}", 2)
         end
         css_file.close()
         webserver.content_close()
     end
 end
 
-return ZbsExtension()
+return TmsExtension()

@@ -1,4 +1,4 @@
-/*! Zigbee Style - a dark theme for the Tasmota web UI - MIT License - Copyright (c) 2026 rmawatson@hotmail.com */
+/*! Tasmota Style - a dark theme for the Tasmota web UI - MIT License - Copyright (c) 2026 rmawatson@hotmail.com */
 
 /* This stylesheet is linked after the style tasmota puts in the head of every page, so a rule
    here wins over a tasmota rule with the same specificity. Rules in a style element in the body
@@ -11,26 +11,28 @@
 
 :root {
     color-scheme: dark;
-    --zs-bg: #0b0f14;
-    --zs-glow: rgba(56, 132, 255, .13);
-    --zs-surface: #121821;
-    --zs-surface2: #18212d;
-    --zs-surface3: #212c3b;
-    --zs-border: #263243;
-    --zs-line: #1c2531;
-    --zs-text: #e6edf3;
-    --zs-muted: #8d9cb0;
-    --zs-faint: #5d6c80;
-    --zs-accent: #3b82f6;
-    --zs-accent2: #60a5fa;
-    --zs-accent-soft: rgba(59, 130, 246, .16);
-    --zs-ok: #4ade80;
-    --zs-ok-soft: rgba(34, 197, 94, .14);
-    --zs-bad: #f87171;
-    --zs-bad-soft: rgba(239, 68, 68, .14);
-    --zs-warn: #fbbf24;
-    --zs-font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --zs-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    --ts-bg: #0b0f14;
+    --ts-glow: rgba(56, 132, 255, .13);
+    --ts-surface: #121821;
+    --ts-surface2: #18212d;
+    --ts-surface3: #212c3b;
+    --ts-border: #263243;
+    --ts-line: #1c2531;
+    --ts-text: #e6edf3;
+    --ts-muted: #8d9cb0;
+    --ts-faint: #5d6c80;
+    --ts-accent: #3b82f6;
+    --ts-accent2: #60a5fa;
+    --ts-accent-soft: rgba(59, 130, 246, .16);
+    --ts-ok: #4ade80;
+    --ts-ok-soft: rgba(34, 197, 94, .14);
+    --ts-bad: #f87171;
+    --ts-bad-soft: rgba(239, 68, 68, .14);
+    --ts-warn: #fbbf24;
+    --ts-r: 4px;
+    --ts-r-sm: 3px;
+    --ts-font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --ts-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 
     /* tasmota's colours, the inline styles of the pages use these */
     --c_bg: #0b0f14;
@@ -58,18 +60,18 @@
 /* ---------------------------------------------------------------- page */
 
 html {
-    background: var(--zs-bg);
+    background: var(--ts-bg);
 }
 
 body {
     margin: 0;
     padding: 20px 16px 28px;
     box-sizing: border-box;
-    font-family: var(--zs-font);
+    font-family: var(--ts-font);
     font-size: 15px;
     line-height: 1.45;
-    color: var(--zs-text);
-    background: radial-gradient(900px 420px at 50% -140px, var(--zs-glow), transparent 70%) no-repeat, var(--zs-bg);
+    color: var(--ts-text);
+    background: radial-gradient(900px 420px at 50% -140px, var(--ts-glow), transparent 70%) no-repeat, var(--ts-bg);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
@@ -91,16 +93,16 @@ body > div[style*='min-width:340px']:has(textarea:not(.za), #mynetwork) {
 }
 
 a {
-    color: var(--zs-accent2);
+    color: var(--ts-accent2);
 }
 
 hr {
     border: 0;
-    border-top: 1px solid var(--zs-border);
+    border-top: 1px solid var(--ts-border);
 }
 
 small {
-    color: var(--zs-muted);
+    color: var(--ts-muted);
 }
 
 /* the module and device names at the top of every page */
@@ -114,7 +116,7 @@ body > div[style*='min-width:340px'] > div:first-child::before {
     width: 42px;
     height: 42px;
     margin: 2px auto 12px;
-    border-radius: 13px;
+    border-radius: var(--ts-r);
     background: icon(house-signal, #fff) center / 22px no-repeat, linear-gradient(140deg, #3b82f6, #7c3aed);
     box-shadow: 0 6px 20px rgba(59, 130, 246, .28), inset 0 1px 0 rgba(255, 255, 255, .25);
 }
@@ -125,7 +127,7 @@ body > div[style*='min-width:340px'] > div:first-child h3 {
     font-weight: 600;
     letter-spacing: .14em;
     text-transform: uppercase;
-    color: var(--zs-muted);
+    color: var(--ts-muted);
 }
 
 body > div[style*='min-width:340px'] > div:first-child h2 {
@@ -133,14 +135,14 @@ body > div[style*='min-width:340px'] > div:first-child h2 {
     font-size: 1.6rem;
     font-weight: 700;
     letter-spacing: -.015em;
-    color: var(--zs-text);
+    color: var(--ts-text);
 }
 
 body > div[style*='min-width:340px'] > div:first-child h4 {
     margin: 4px 0 0;
     font-size: .8rem;
     font-weight: 500;
-    color: var(--zs-muted);
+    color: var(--ts-muted);
 }
 
 /* the title of a page, <h3><hr>Title<hr></h3> */
@@ -154,7 +156,7 @@ h3:has(> hr) {
     font-weight: 600;
     letter-spacing: .14em;
     text-transform: uppercase;
-    color: var(--zs-muted);
+    color: var(--ts-muted);
 }
 
 h3 > hr {
@@ -178,11 +180,11 @@ div[style*='text-align:right;font-size:11px'] {
 
 div[style*='text-align:right;font-size:11px'] hr {
     margin: 0 0 12px;
-    border-color: var(--zs-line);
+    border-color: var(--ts-line);
 }
 
 div[style*='text-align:right;font-size:11px'] a {
-    color: var(--zs-faint) !important;
+    color: var(--ts-faint) !important;
 }
 
 /* ---------------------------------------------------------------- cards */
@@ -190,9 +192,9 @@ div[style*='text-align:right;font-size:11px'] a {
 fieldset {
     margin: 0 0 10px;
     padding: 14px 16px 16px;
-    background: var(--zs-surface);
-    border: 1px solid var(--zs-border);
-    border-radius: 16px;
+    background: var(--ts-surface);
+    border: 1px solid var(--ts-border);
+    border-radius: var(--ts-r);
     box-shadow: 0 10px 30px rgba(0, 0, 0, .22);
 }
 
@@ -205,7 +207,7 @@ legend {
     font-size: .72rem;
     letter-spacing: .12em;
     text-transform: uppercase;
-    color: var(--zs-muted);
+    color: var(--ts-muted);
 }
 
 legend + * {
@@ -233,8 +235,8 @@ textarea {
     font-size: .95rem;
     color: var(--c_intxt);
     background: var(--c_in);
-    border: 1px solid var(--zs-border);
-    border-radius: 10px;
+    border: 1px solid var(--ts-border);
+    border-radius: var(--ts-r);
     outline: none;
     transition: border-color .15s ease, box-shadow .15s ease;
 }
@@ -254,13 +256,13 @@ textarea:hover {
 input:focus,
 select:focus,
 textarea:focus {
-    border-color: var(--zs-accent);
-    box-shadow: 0 0 0 3px var(--zs-accent-soft);
+    border-color: var(--ts-accent);
+    box-shadow: 0 0 0 3px var(--ts-accent-soft);
 }
 
 input::placeholder,
 textarea::placeholder {
-    color: var(--zs-faint);
+    color: var(--ts-faint);
 }
 
 select {
@@ -274,7 +276,7 @@ input[type=radio] {
     margin: 0 8px 0 0;
     padding: 0;
     vertical-align: -3px;
-    accent-color: var(--zs-accent);
+    accent-color: var(--ts-accent);
     box-shadow: none;
     cursor: pointer;
 }
@@ -293,13 +295,13 @@ input[type=range] {
     border: 0;
     background: transparent;
     box-shadow: none;
-    accent-color: var(--zs-accent);
+    accent-color: var(--ts-accent);
 }
 
 input[type=file] {
     padding: 6px;
-    background: var(--zs-surface2);
-    color: var(--zs-muted);
+    background: var(--ts-surface2);
+    color: var(--ts-muted);
 }
 
 input[type=file]::file-selector-button {
@@ -307,10 +309,10 @@ input[type=file]::file-selector-button {
     padding: 6px 12px;
     font: inherit;
     font-weight: 600;
-    color: var(--zs-text);
-    background: var(--zs-surface3);
-    border: 1px solid var(--zs-border);
-    border-radius: 8px;
+    color: var(--ts-text);
+    background: var(--ts-surface3);
+    border: 1px solid var(--ts-border);
+    border-radius: var(--ts-r-sm);
     cursor: pointer;
 }
 
@@ -318,12 +320,12 @@ textarea {
     box-sizing: border-box;
     width: 100%;
     padding: 12px 14px;
-    font-family: var(--zs-mono);
+    font-family: var(--ts-mono);
     font-size: 12.5px;
     line-height: 1.55;
     color: var(--c_csltxt);
     background: var(--c_csl);
-    border-radius: 14px;
+    border-radius: var(--ts-r);
 }
 
 /* ---------------------------------------------------------------- buttons */
@@ -337,7 +339,7 @@ button {
     color: var(--c_btntxt);
     background: var(--c_btn);
     border: 0;
-    border-radius: 12px;
+    border-radius: var(--ts-r);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1);
     transition: background-color .15s ease, border-color .15s ease, color .15s ease, filter .15s ease;
 }
@@ -351,14 +353,14 @@ button:active {
 }
 
 button:focus-visible {
-    outline: 2px solid var(--zs-accent2);
+    outline: 2px solid var(--ts-accent2);
     outline-offset: 2px;
 }
 
 button:disabled,
 button:disabled:hover {
-    color: var(--zs-muted);
-    background: var(--zs-surface3);
+    color: var(--ts-muted);
+    background: var(--ts-surface3);
     box-shadow: none;
     cursor: not-allowed;
 }
@@ -414,15 +416,15 @@ a > button {
     padding: 0 14px 0 13px;
     font-weight: 500;
     text-align: left;
-    color: var(--zs-text);
-    background: var(--zs-surface);
-    border: 1px solid var(--zs-border);
+    color: var(--ts-text);
+    background: var(--ts-surface);
+    border: 1px solid var(--ts-border);
     box-shadow: none;
 }
 
 p + form:not(.zt):not([method=post]) > button:last-child:hover,
 a > button:hover {
-    background: var(--zs-surface2);
+    background: var(--ts-surface2);
     border-color: #33435a;
 }
 
@@ -432,7 +434,7 @@ a > button::before {
     flex: none;
     width: 18px;
     height: 18px;
-    background: var(--zs-accent2);
+    background: var(--ts-accent2);
     -webkit-mask: var(--i) center / contain no-repeat;
     mask: var(--i) center / contain no-repeat;
 }
@@ -444,24 +446,24 @@ a > button::after {
     width: 11px;
     height: 11px;
     margin-left: auto;
-    background: var(--zs-faint);
+    background: var(--ts-faint);
     -webkit-mask: icon(chevron-right) center / contain no-repeat;
     mask: icon(chevron-right) center / contain no-repeat;
 }
 
 /* restart and reset configuration */
 p + form:not(.zt):not([method=post]) > button.bred:last-child {
-    color: var(--zs-bad);
-    background: var(--zs-surface);
+    color: var(--ts-bad);
+    background: var(--ts-surface);
 }
 
 p + form:not(.zt):not([method=post]) > button.bred:last-child:hover {
-    background: var(--zs-bad-soft);
+    background: var(--ts-bad-soft);
     border-color: rgba(239, 68, 68, .45);
 }
 
 p + form:not(.zt):not([method=post]) > button.bred:last-child::before {
-    background: var(--zs-bad);
+    background: var(--ts-bad);
 }
 
 /* the icons of the menus, any other page has a cube */
@@ -506,9 +508,9 @@ a[href=zbm] { --i: icon(diagram-project) }
 #l1:has(th, td) {
     margin: 6px 0 12px;
     padding: 6px 16px !important;
-    background: var(--zs-surface);
-    border: 1px solid var(--zs-border);
-    border-radius: 16px;
+    background: var(--ts-surface);
+    border: 1px solid var(--ts-border);
+    border-radius: var(--ts-r);
     box-shadow: 0 10px 30px rgba(0, 0, 0, .22);
 }
 
@@ -520,7 +522,7 @@ a[href=zbm] { --i: icon(diagram-project) }
     padding: 8px 12px 8px 0;
     font-weight: 500;
     text-align: left;
-    color: var(--zs-muted);
+    color: var(--ts-muted);
 }
 
 #l1 td {
@@ -529,7 +531,7 @@ a[href=zbm] { --i: icon(diagram-project) }
 }
 
 #l1 tr:has(> th) + tr:has(> th) > * {
-    border-top: 1px solid var(--zs-line);
+    border-top: 1px solid var(--ts-line);
 }
 
 #l1 td[colspan] hr {
@@ -539,26 +541,26 @@ a[href=zbm] { --i: icon(diagram-project) }
 /* the status line, wifi and the stickers at the top */
 #l1 > div[style*='position:absolute'] {
     padding: 2px;
-    color: var(--zs-muted);
+    color: var(--ts-muted);
 }
 
 #l1 span[style*='border-style:solid'] {
     margin: 0 0 0 4px !important;
     padding: 1px 6px !important;
-    color: var(--zs-muted);
-    background: var(--zs-surface2);
-    border-color: var(--zs-border) !important;
-    border-radius: 6px !important;
+    color: var(--ts-muted);
+    background: var(--ts-surface2);
+    border-color: var(--ts-border) !important;
+    border-radius: var(--ts-r-sm) !important;
 }
 
 /* the power state, ON or OFF, under the sensors */
 #l1 td[style*='font-weight:bold'] {
-    color: var(--zs-text);
+    color: var(--ts-text);
     letter-spacing: -.02em;
 }
 
 #l1 td[style*='font-weight:normal'] {
-    color: var(--zs-faint);
+    color: var(--ts-faint);
     letter-spacing: -.02em;
 }
 
@@ -566,14 +568,14 @@ a[href=zbm] { --i: icon(diagram-project) }
    var(--c_btnoff) when off, so both colours are set on the buttons */
 td > button[id^=o][onclick] {
     --c_btn: linear-gradient(135deg, #2563eb, #4f46e5);
-    --c_btnoff: var(--zs-surface2);
+    --c_btnoff: var(--ts-surface2);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 9px;
     line-height: 3rem;
     background: var(--c_btn);
-    border-radius: 14px;
+    border-radius: var(--ts-r);
 }
 
 td > button[id^=o][onclick]:hover {
@@ -581,8 +583,8 @@ td > button[id^=o][onclick]:hover {
 }
 
 td > button[id^=o][onclick][style*=btnoff] {
-    color: var(--zs-muted);
-    box-shadow: inset 0 0 0 1px var(--zs-border);
+    color: var(--ts-muted);
+    box-shadow: inset 0 0 0 1px var(--ts-border);
 }
 
 td > button[id^=o][onclick]::before {
@@ -595,11 +597,11 @@ td > button[id^=o][onclick]::before {
     mask: icon(power-off) center / contain no-repeat;
 }
 
-/* the light sliders, the gradient is drawn by tasmota behind the slider */
+/* the light sliders, the gradient is drawn by tasmota behind the slider. the handles are faders */
 div.r {
     margin: 8px 2px;
     padding: 3px 4px;
-    border-radius: 999px;
+    border-radius: var(--ts-r);
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1);
 }
 
@@ -620,12 +622,12 @@ div.r input[type=range]::-webkit-slider-runnable-track {
 
 div.r input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 22px;
+    width: 10px;
     height: 22px;
     background: #fff;
     border: 0;
-    border-radius: 50%;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, .5), 0 0 0 3px rgba(0, 0, 0, .2);
+    border-radius: var(--ts-r-sm);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .55), 0 0 0 2px rgba(0, 0, 0, .25);
 }
 
 div.r input[type=range]::-moz-range-track {
@@ -633,18 +635,18 @@ div.r input[type=range]::-moz-range-track {
 }
 
 div.r input[type=range]::-moz-range-thumb {
-    width: 22px;
+    width: 10px;
     height: 22px;
     background: #fff;
     border: 0;
-    border-radius: 50%;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, .5), 0 0 0 3px rgba(0, 0, 0, .2);
+    border-radius: var(--ts-r-sm);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .55), 0 0 0 2px rgba(0, 0, 0, .25);
 }
 
 /* the zigbee devices */
 #l1 tr.ztd > td {
     padding-top: 9px;
-    border-top: 1px solid var(--zs-line);
+    border-top: 1px solid var(--ts-line);
 }
 
 #l1 tr.ztd:first-child > td {
@@ -658,15 +660,15 @@ div.r input[type=range]::-moz-range-thumb {
 #l1 tr.htr > td[colspan] {
     padding: 0 0 8px;
     font-size: .85rem;
-    color: var(--zs-muted);
+    color: var(--ts-muted);
 }
 
 #l1 .si i {
-    background-color: var(--zs-accent2);
+    background-color: var(--ts-accent2);
 }
 
 #l1 div[style*='color:#aaa'] {
-    color: var(--zs-faint) !important;
+    color: var(--ts-faint) !important;
 }
 
 #l1 td[colspan] > button {
@@ -679,9 +681,9 @@ div.r input[type=range]::-moz-range-thumb {
 #i {
     margin: 4px 0 12px;
     padding: 6px 16px;
-    background: var(--zs-surface);
-    border: 1px solid var(--zs-border);
-    border-radius: 16px;
+    background: var(--ts-surface);
+    border: 1px solid var(--ts-border);
+    border-radius: var(--ts-r);
 }
 
 #i table {
@@ -694,7 +696,7 @@ div.r input[type=range]::-moz-range-thumb {
     text-align: left;
     vertical-align: top;
     white-space: nowrap;
-    color: var(--zs-muted);
+    color: var(--ts-muted);
 }
 
 #i td {
@@ -703,7 +705,7 @@ div.r input[type=range]::-moz-range-thumb {
 }
 
 #i tr + tr > * {
-    border-top: 1px solid var(--zs-line);
+    border-top: 1px solid var(--ts-line);
 }
 
 /* console */
@@ -714,7 +716,7 @@ textarea#t1 {
 }
 
 input#c1 {
-    font-family: var(--zs-mono);
+    font-family: var(--ts-mono);
     font-size: 13px;
 }
 
@@ -727,12 +729,12 @@ fieldset button.btn-small {
     padding: 0 10px;
     font-size: .8rem;
     line-height: 1.9rem;
-    border-radius: 8px;
+    border-radius: var(--ts-r-sm);
 }
 
 fieldset .ext-store-item {
-    border: 1px solid var(--zs-border);
-    border-radius: 12px;
+    border: 1px solid var(--ts-border);
+    border-radius: var(--ts-r);
 }
 
 /* ---------------------------------------------------------------- zigbee manager */
@@ -740,23 +742,23 @@ fieldset .ext-store-item {
 form.zt[method=get] {
     gap: 4px;
     padding: 4px;
-    background: var(--zs-surface);
-    border: 1px solid var(--zs-border);
-    border-radius: 14px;
+    background: var(--ts-surface);
+    border: 1px solid var(--ts-border);
+    border-radius: var(--ts-r);
 }
 
 form.zt[method=get] button {
     line-height: 2.3rem;
     font-size: .9rem;
-    color: var(--zs-muted);
+    color: var(--ts-muted);
     background: transparent;
-    border-radius: 10px;
+    border-radius: var(--ts-r-sm);
     box-shadow: none;
 }
 
 form.zt[method=get] button:hover {
-    color: var(--zs-text);
-    background: var(--zs-surface2);
+    color: var(--ts-text);
+    background: var(--ts-surface2);
 }
 
 form.zt[method=get] button.zc {
@@ -782,22 +784,22 @@ form[action=zbman][method=post] button[value=add_schema] { --i: icon(upload) }
 form[action=zbman][method=post] button[value=save_settings] { --i: icon(floppy-disk) }
 
 form.zt[method=post] button:not(:disabled) {
-    color: var(--zs-text);
-    background: var(--zs-surface);
-    border: 1px solid var(--zs-border);
+    color: var(--ts-text);
+    background: var(--ts-surface);
+    border: 1px solid var(--ts-border);
     box-shadow: none;
 }
 
 form.zt[method=post] button:not(:disabled):hover {
-    background: var(--zs-surface2);
+    background: var(--ts-surface2);
 }
 
 div.zd {
     margin: 10px 0;
     padding: 11px 13px;
-    background: var(--zs-surface2);
-    border: 1px solid var(--zs-border);
-    border-radius: 12px;
+    background: var(--ts-surface2);
+    border: 1px solid var(--ts-border);
+    border-radius: var(--ts-r);
 }
 
 div.zd .zh b {
@@ -805,15 +807,15 @@ div.zd .zh b {
 }
 
 span.zs {
-    --c_btnsv: var(--zs-ok);
+    --c_btnsv: var(--ts-ok);
     padding: 2px 9px;
     font-size: .72rem;
     font-weight: 600;
     white-space: nowrap;
-    color: var(--zs-muted);
+    color: var(--ts-muted);
     background: rgba(255, 255, 255, .04);
-    border: 1px solid var(--zs-border);
-    border-radius: 999px;
+    border: 1px solid var(--ts-border);
+    border-radius: var(--ts-r-sm);
 }
 
 table.zi {
@@ -826,7 +828,7 @@ table.zi td {
 
 table.zi td:first-child {
     opacity: 1;
-    color: var(--zs-muted);
+    color: var(--ts-muted);
 }
 
 div.zr {
@@ -843,13 +845,13 @@ button.zb {
     padding: 0 12px;
     font-size: .85rem;
     line-height: 2.25rem;
-    border-radius: 10px;
+    border-radius: var(--ts-r);
 }
 
 button.zb:not(.bgrn):not(.bred) {
-    color: var(--zs-text);
-    background: var(--zs-surface3);
-    box-shadow: inset 0 0 0 1px var(--zs-border);
+    color: var(--ts-text);
+    background: var(--ts-surface3);
+    box-shadow: inset 0 0 0 1px var(--ts-border);
 }
 
 button.zb:not(.bgrn):not(.bred):hover {
@@ -857,13 +859,13 @@ button.zb:not(.bgrn):not(.bred):hover {
 }
 
 div.zm {
-    --c_btnsv: var(--zs-ok-soft);
-    --c_btnrst: var(--zs-bad-soft);
+    --c_btnsv: var(--ts-ok-soft);
+    --c_btnrst: var(--ts-bad-soft);
     padding: 10px 14px;
     font-weight: 500;
-    color: var(--zs-text);
-    border: 1px solid var(--zs-border);
-    border-radius: 12px;
+    color: var(--ts-text);
+    border: 1px solid var(--ts-border);
+    border-radius: var(--ts-r);
 }
 
 div.zm[style*=btnsv] {
@@ -875,12 +877,12 @@ div.zm[style*=btnrst] {
 }
 
 p.zn {
-    color: var(--zs-muted);
+    color: var(--ts-muted);
 }
 
 textarea.za {
     height: 180px;
-    font-family: var(--zs-mono);
+    font-family: var(--ts-mono);
     font-size: 12.5px;
 }
 
