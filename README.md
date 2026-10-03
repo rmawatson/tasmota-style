@@ -33,9 +33,13 @@ page, Tasmota's own and the ones added by Berry extensions like
 
 ## Install
 
-Download [zigbee_style.tapp](https://raw.githubusercontent.com/rmawatson/tasmota-zigbee-style/main/extensions/tapp/zigbee_style.tapp)
+To install this extension in Tasmota, paste the url `https://raw.githubusercontent.com/rmawatson/tasmota-zigbee-style/refs/heads/main/extensions/`
+into the field at the bottom of the Online Store in `Tools->Extension Manager`, press Enter, and install Zigbee Style
+from the list.
+
+Or download [zigbee_style.tapp](https://raw.githubusercontent.com/rmawatson/tasmota-zigbee-style/main/extensions/tapp/zigbee_style.tapp)
 and upload it to the `/.extensions` folder of the device with Tools > Manage File system. Start it from
-Configuration > Extension Manager, or restart the device.
+Tools > Extension Manager, or restart the device.
 
 Or in the Berry Scripting console:
 
