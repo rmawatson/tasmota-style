@@ -40,11 +40,21 @@ own `WebColor` settings, picked from presets or one by one in the Tasmota Style 
 
 ## Install
 
-To install this extension in Tasmota, paste the url `https://raw.githubusercontent.com/rmawatson/tasmota-style/refs/heads/main/extensions/`
+To install this extension in Tasmota, paste the url 
+
+```
+https://raw.githubusercontent.com/rmawatson/tasmota-style/refs/heads/main/extensions/
+```
+
 into the field at the bottom of the Online Store in `Tools->Extension Manager`, press Enter, and install Tasmota Style
 from the list.
 
-Or download [tasmota_style.tapp](https://raw.githubusercontent.com/rmawatson/tasmota-style/refs/heads/main/extensions/tapp/tasmota_style.tapp)
+Or download 
+
+
+[tasmota_style.tapp](https://raw.githubusercontent.com/rmawatson/tasmota-style/refs/heads/main/extensions/tapp/tasmota_style.tapp)
+
+
 and upload it to the `/.extensions` folder of the device with Tools > Manage File system. Start it from
 Tools > Extension Manager, or restart the device.
 
