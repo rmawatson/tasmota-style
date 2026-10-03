@@ -214,6 +214,10 @@ the `--c_bg`, `--c_btn`, ... variables Tasmota writes with the `WebColor` colour
   your new value in front of the link, to put back when it stops. The theme draws its own background over it.
 - The colours from before the theme are kept in `persist` as `tms_colors_before`, and the theme's colours as
   `tms_colors` while it is stopped.
+- When Tasmota can not write `persist` to `_persist.json`, most often because the file system is full, the
+  Tasmota Style Manager shows `Unable to save the settings, write failed`. Tasmota's `persist.save()` then writes
+  `{}` to the file, and the values of every extension are only in memory. Free some space, and run
+  `persist.save(true)` in the Berry Scripting console before restarting.
 - If the tapp is deleted from the file system without stopping it first, the link stays in `WebCanvas` and
   the theme's colours stay set. The stylesheet is then not found, and the pages are Tasmota's own with those
   colours. `WebCanvas 0` removes the link, `WebColor 0` sets Tasmota's default colours.

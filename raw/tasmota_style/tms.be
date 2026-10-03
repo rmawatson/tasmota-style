@@ -130,8 +130,10 @@ class TmsButtons
     end
 
     static def set(style)
-        persist.tms_buttons = style
-        persist.save()
+        if persist.find("tms_buttons") != style
+            persist.tms_buttons = style
+            persist.save()
+        end
     end
 end
 
@@ -221,6 +223,15 @@ class TmsSettings
         end
         TmsButtons.set(found)
         return [f"Menu buttons: {TmsButtons.name(found)}", true]
+    end
+
+    # the message for an error. persist.save() raises io_error when it can not write _persist.json,
+    # most often because the file system is full
+    static def error_message(e, m)
+        if e == "io_error"
+            return f"Unable to save the settings, {m}. The file system may be full, Tools > Manage File System shows its free space"
+        end
+        return f"{e}, {m}"
     end
 
     # the colours and menu buttons the theme starts with
@@ -374,11 +385,22 @@ class TmsCommands
     static var config_keys = ["preset", "buttons"]
 
     static def add()
-        tasmota.add_cmd("TsmConfig", _class.config)
-        tasmota.add_cmd("TsmPresets", _class.presets)
-        tasmota.add_cmd("TsmResetConfig", _class.reset_config)
-        tasmota.add_cmd("TsmExport", _class.export)
-        tasmota.add_cmd("TsmImport", _class.load)
+        tasmota.add_cmd("TsmConfig", _class.guarded(_class.config))
+        tasmota.add_cmd("TsmPresets", _class.guarded(_class.presets))
+        tasmota.add_cmd("TsmResetConfig", _class.guarded(_class.reset_config))
+        tasmota.add_cmd("TsmExport", _class.guarded(_class.export))
+        tasmota.add_cmd("TsmImport", _class.guarded(_class.load))
+    end
+
+    # the command, with an error it raises, such as a failed persist.save(), logged and answered with Error
+    static def guarded(command)
+        return def (cmd, idx, payload, payload_json)
+            try
+                command(cmd, idx, payload, payload_json)
+            except .. as e, m
+                _class.error(cmd, TmsSettings.error_message(e, m))
+            end
+        end
     end
 
     static def remove()
@@ -628,7 +650,7 @@ class TmsManager
                 self.message = self.import_settings()
             end
         except .. as e, m
-            self.message = [f"{e}, {m}", false]
+            self.message = [TmsSettings.error_message(e, m), false]
         end
         webserver.redirect(self.url)
     end
@@ -887,13 +909,17 @@ class TmsExtension
         return nil
     end
 
+    # only the bytes that are left are read. read(n) frees its buffer with the size it read, so when
+    # it reads nothing, at the end of a file, the n bytes are never freed: 2 KB lost on every page
     def send_file(source)
-        while true
-            var chunk = source.read(self.chunk_size)
+        var left = source.size() - source.tell()
+        while left > 0
+            var chunk = source.read(left < self.chunk_size ? left : self.chunk_size)
             if !size(chunk)
                 break
             end
             webserver.content_send(chunk)
+            left -= size(chunk)
         end
     end
 
