@@ -1,4 +1,4 @@
-/*! Tasmota Style - a dark theme for the Tasmota web UI - MIT License - Copyright (c) 2026 rmawatson@hotmail.com */
+/*! Tasmota Style - a modern theme for the Tasmota web UI - MIT License - Copyright (c) 2026 rmawatson@hotmail.com */
 
 /* This stylesheet is linked after the style tasmota puts in the head of every page, so a rule
    here wins over a tasmota rule with the same specificity. Rules in a style element in the body
