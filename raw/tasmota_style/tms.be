@@ -16,6 +16,9 @@ class TmsPalette
                         "Timer tab", "Title", "Button off"]
 
     static var presets = [
+        ["Charcoal", ["#e6e7e9", "#121314", "#1b1c1e", "#e6e7e9", "#151618", "#cfd1d4", "#0d0e0f", "#fbbf24", "#4ade80",
+                      "#ffffff", "#1786e8", "#3fa0f2", "#dc2626", "#ef4444", "#16a34a", "#22c55e", "#e6e7e9", "#2b2d30",
+                      "#f1f2f3", "#2e3033"]],
         ["Midnight", ["#e6edf3", "#0b0f14", "#121821", "#e6edf3", "#0d131b", "#c9d5e3", "#070a0f", "#fbbf24", "#4ade80",
                       "#ffffff", "#2563eb", "#3b82f6", "#dc2626", "#ef4444", "#16a34a", "#22c55e", "#e6edf3", "#212c3b",
                       "#e6edf3", "#263243"]],
@@ -38,7 +41,7 @@ class TmsPalette
                            "#ffffff", "#1fa3ec", "#0e70a4", "#d43535", "#931f1f", "#47c266", "#5aaf6f", "#ffffff", "#999999",
                            "#000000", "#a1d9f7"]]
     ]
-    static var default_preset = "Midnight"
+    static var default_preset = "Charcoal"
 
     # the colours tasmota uses now, lower case #rrggbb as WebColor answers, or nil
     static def colors()

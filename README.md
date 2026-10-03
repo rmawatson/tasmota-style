@@ -14,13 +14,17 @@ own `WebColor` settings, picked from presets or one by one in the Tasmota Style 
 </table>
 
 <table>
-<tr><th>Daylight</th><th>Graphite</th><th>Ocean</th><th>Ember</th></tr>
+<tr><th>Midnight</th><th>Graphite</th><th>Ocean</th><th>Ember</th><th>Daylight</th></tr>
 <tr>
-<td valign="top"><img src="docs/images/preset_daylight.png" width="195"></td>
-<td valign="top"><img src="docs/images/preset_graphite.png" width="195"></td>
-<td valign="top"><img src="docs/images/preset_ocean.png" width="195"></td>
-<td valign="top"><img src="docs/images/preset_ember.png" width="195"></td>
+<td valign="top"><img src="docs/images/preset_midnight.png" width="156"></td>
+<td valign="top"><img src="docs/images/preset_graphite.png" width="156"></td>
+<td valign="top"><img src="docs/images/preset_ocean.png" width="156"></td>
+<td valign="top"><img src="docs/images/preset_ember.png" width="156"></td>
+<td valign="top"><img src="docs/images/preset_daylight.png" width="156"></td>
 </tr>
+</table>
+
+<table>
 <tr><th>Configuration</th><th>Settings</th><th>Information</th><th>Console</th></tr>
 <tr>
 <td valign="top"><img src="docs/images/configuration.png" width="195"></td>
@@ -73,20 +77,20 @@ Uninstall in the Extension Manager.
 ## Colours
 
 The theme uses the 20 colours of Tasmota's `WebColor` command. The first time it starts it sets them to the
-Midnight preset. The colours you had are kept, and put back when the extension stops or is uninstalled. The
+Charcoal preset. The colours you had are kept, and put back when the extension stops or is uninstalled. The
 theme's colours are kept too, and set again when it starts.
 
 Change them in Configuration > Tasmota Style Manager:
 
-- **Presets** sets all 20 colours at once: Midnight, Graphite, Ocean, Ember, Daylight, and Tasmota's own
+- **Presets** sets all 20 colours at once: Charcoal, Midnight, Graphite, Ocean, Ember, Daylight, and Tasmota's own
   Tasmota dark and Tasmota light. If the colours you had before were not one of them, they are there as
   Before Tasmota Style. The preset in use is marked Current.
 - **Colours** shows the 20 colours with a colour picker each, Save sets them.
-- **Reset to defaults** sets the colours the theme starts with, the Midnight preset, after asking to confirm.
+- **Reset to defaults** sets the colours the theme starts with, the Charcoal preset, after asking to confirm.
   Tasmota's own default colours are the Tasmota dark preset.
 
-The `WebColor` command works too, `WebColor11 #2563eb` sets the button colour, and
-`WebColor {"WebColor":["#e6edf3","#0b0f14",...]}` all 20. The page shows the colours Tasmota has.
+The `WebColor` command works too, `WebColor11 #1786e8` sets the button colour, and
+`WebColor {"WebColor":["#e6e7e9","#121314",...]}` all 20. The page shows the colours Tasmota has.
 
 The stylesheet uses Tasmota's colours, and mixes the rest from them: the borders and rows of the cards from
 the form and text colours, the dimmer text from the text colour, the icons and links from the button colour.
