@@ -6,6 +6,8 @@ by var(--fa-name), and the icon itself, src/icons/name.svg, is added once to :ro
 url, so an icon used by several rules is only sent once. icon(name) has no colour, it is used
 as a mask, icon(name,#fff) is filled with the colour, to be used as a background. The result
 is minified, it is read from the tapp and sent to the browser on every page.
+Each menu button style in src/buttons is minified to raw/tasmota_style/btn_<style>.css, the
+extension adds the chosen one to the end of the stylesheet. They can not use icon().
 """
 
 import re
@@ -15,6 +17,7 @@ from pathlib import Path
 SOURCE = Path("src/tms.css")
 ICONS = Path("src/icons")
 OUTPUT = Path("raw/tasmota_style/tms.css")
+BUTTONS = Path("src/buttons")
 
 ATTRIBUTION = ("/*! Icons: Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com "
                "License - https://fontawesome.com/license/free (Icons: CC BY 4.0) "
@@ -96,6 +99,19 @@ def build():
     print(f"Created: {OUTPUT} ({len(result)} bytes, {len(icons)} icons)")
     if unused:
         print(f"Unused icons: {', '.join(unused)}")
+
+    styles = sorted(BUTTONS.glob("*.css"))
+    for source in styles:
+        style = minify(source.read_text(encoding="utf-8"))
+        if "icon(" in style or not style.isascii():
+            raise ValueError(f"{source} must be ascii and can not use icon()")
+        output = OUTPUT.parent / f"btn_{source.stem}.css"
+        output.write_text(style + "\n", encoding="utf-8")
+        print(f"Created: {output} ({len(style) + 1} bytes)")
+    for output in OUTPUT.parent.glob("btn_*.css"):
+        if output.stem[4:] not in [source.stem for source in styles]:
+            output.unlink()
+            print(f"Removed: {output}")
 
 
 if __name__ == "__main__":

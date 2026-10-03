@@ -1,0 +1,1 @@
+p + form:not(.zt):not([method=post])>button:last-child,a>button{box-shadow:inset 3px 0 0 var(--c_btn)}p + form:not(.zt):not([method=post])>button.bred:last-child{box-shadow:inset 3px 0 0 var(--c_btnrst)}

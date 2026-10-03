@@ -1,0 +1,39 @@
+/* Solid: the menu rows are filled with the button colour, Restart and Reset with the reset colour,
+   with the text, icon and chevron in the button text colour */
+
+p + form:not(.zt):not([method=post]) > button:last-child,
+a > button {
+    color: var(--c_btntxt);
+    background: var(--c_btn);
+    border-color: transparent;
+}
+
+p + form:not(.zt):not([method=post]) > button:last-child:hover,
+a > button:hover {
+    background: var(--c_btnhvr);
+    border-color: transparent;
+}
+
+p + form:not(.zt):not([method=post]) > button:last-child::before,
+a > button::before {
+    background: var(--c_btntxt);
+}
+
+p + form:not(.zt):not([method=post]) > button:last-child::after,
+a > button::after {
+    background: var(--c_btntxt);
+    opacity: .7;
+}
+
+p + form:not(.zt):not([method=post]) > button.bred:last-child {
+    color: var(--c_btntxt);
+    background: var(--c_btnrst);
+}
+
+p + form:not(.zt):not([method=post]) > button.bred:last-child:hover {
+    background: var(--c_btnrsthvr);
+}
+
+p + form:not(.zt):not([method=post]) > button.bred:last-child::before {
+    background: var(--c_btntxt);
+}

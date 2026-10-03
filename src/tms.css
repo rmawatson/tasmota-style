@@ -25,7 +25,7 @@
     --ts-muted: color-mix(in srgb, var(--c_txt) 62%, var(--c_frm));
     --ts-faint: color-mix(in srgb, var(--c_txt) 40%, var(--c_frm));
     --ts-accent: var(--c_btn);
-    --ts-accent2: color-mix(in srgb, var(--c_btn) 65%, var(--c_txt));
+    --ts-accent2: color-mix(in srgb, var(--c_btn) 85%, var(--c_txt));
     --ts-accent-soft: color-mix(in srgb, var(--c_btn) 22%, transparent);
     --ts-glow: color-mix(in srgb, var(--c_btn) 13%, transparent);
     --ts-on: linear-gradient(135deg, var(--c_btn), var(--c_btnhvr));
@@ -74,7 +74,7 @@ body > div[style*='min-width:340px'] {
 }
 
 /* the console, the zigbee map and the script editors need the room */
-body > div[style*='min-width:340px']:has(textarea:not(.za), #mynetwork) {
+body > div[style*='min-width:340px']:has(textarea:not(.za):not(.tsj), #mynetwork) {
     max-width: 960px;
 }
 
@@ -385,6 +385,8 @@ button:disabled:hover {
 
 /* an icon in front of the text of a button, the icon is --i */
 button[name=save]::before,
+form[action=tms] button[name=reset]::before,
+div.tsr > button::before,
 form[action=u1] button::before,
 form[action^=u2] button::before,
 button[onclick*=zbj]::before,
@@ -402,6 +404,12 @@ form.zt[method=get] button::before {
 }
 
 button[name=save] { --i: icon(floppy-disk) }
+form[action=tms] button[name=reset] { --i: icon(rotate-left) }
+button.tsc { --i: icon(copy) }
+button.tsd { --i: icon(download) }
+button.tsl { --i: icon(folder-open) }
+button.tsi { --i: icon(file-import) }
+button.tsu { --i: icon(cloud-arrow-down) }
 form[action=u1] button,
 form[action^=u2] button { --i: icon(arrow-up-from-bracket) }
 button[onclick*=zbj] { --i: icon(link) }
@@ -805,6 +813,33 @@ form.tsp small {
     color: var(--ts-accent2);
 }
 
+/* the menu button styles, with a small sample of each */
+form.tsp span.tsb {
+    width: 42px;
+    height: 22px;
+    background: var(--c_frm);
+}
+
+form.tsp span.tsb-edge {
+    background: linear-gradient(90deg, var(--c_btn) 3px, var(--c_frm) 3px);
+}
+
+form.tsp span.tsb-tinted {
+    background: color-mix(in srgb, var(--c_btn) 18%, var(--c_frm));
+}
+
+form.tsp span.tsb-solid {
+    background: var(--c_btn);
+}
+
+form.tsp span.tsb-tiles {
+    background: linear-gradient(var(--c_btn) 0 0) 5px 50% / 12px 12px no-repeat, var(--c_frm);
+}
+
+form.tsp span.tsb-fade {
+    background: linear-gradient(90deg, color-mix(in srgb, var(--c_btn) 45%, var(--c_frm)), var(--c_frm));
+}
+
 /* the colours, two to a row */
 div.tsg {
     display: grid;
@@ -844,6 +879,67 @@ div.tsg input[type=color]::-webkit-color-swatch {
 div.tsg input[type=color]::-moz-color-swatch {
     border: 0;
     border-radius: 2px;
+}
+
+/* export and import: the settings as json, buttons to copy, save, load and import them, and the
+   url of another device to load them from */
+p.tsn {
+    margin: 0 0 10px;
+    font-size: .85rem;
+    color: var(--ts-muted);
+}
+
+form.tsx + p.tsn {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--ts-border);
+}
+
+p.tsn a {
+    overflow-wrap: anywhere;
+}
+
+textarea.tsj {
+    height: 112px;
+    resize: vertical;
+    word-break: break-all;
+}
+
+div.tsr {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 0;
+}
+
+div.tsr > * {
+    flex: 1;
+    width: 0;
+    margin: 0;
+}
+
+div.tsr > input + button {
+    flex: none;
+    width: auto;
+    padding: 0 14px;
+}
+
+/* copy, save and load from file are drawn like the presets, the imports in the button colour */
+div.tsr > button[type=button] {
+    font-weight: 500;
+    color: var(--ts-text);
+    background: var(--ts-surface2);
+    border: 1px solid var(--ts-border);
+    box-shadow: none;
+}
+
+div.tsr > button[type=button]:hover {
+    background: var(--ts-surface3);
+    border-color: var(--ts-border2);
+}
+
+div.tsr > button[type=button]::before {
+    background: var(--ts-accent2);
 }
 
 /* ---------------------------------------------------------------- zigbee manager */
