@@ -1,0 +1,8 @@
+{
+  "name": "Zigbee Style",
+  "version": "0x01000000",
+  "description": "A modern dark theme for the Tasmota web UI",
+  "author": "rmawatson@hotmail.com",
+  "min_tasmota": "0x09040000",
+  "features": ""
+}

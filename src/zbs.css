@@ -1,0 +1,894 @@
+/*! Zigbee Style - a dark theme for the Tasmota web UI - MIT License - Copyright (c) 2026 rmawatson@hotmail.com */
+
+/* This stylesheet is linked after the style tasmota puts in the head of every page, so a rule
+   here wins over a tasmota rule with the same specificity. Rules in a style element in the body
+   (the zigbee table, the extension manager and the zigbee manager pages) come later and win
+   instead, those are overridden with a more specific selector. Inline styles need !important.
+   The pages are matched on their form actions and the inline styles tasmota writes, which do not
+   change with the language of the firmware. icon(name) is replaced by scripts/gen_css.py */
+
+/* ---------------------------------------------------------------- colours */
+
+:root {
+    color-scheme: dark;
+    --zs-bg: #0b0f14;
+    --zs-glow: rgba(56, 132, 255, .13);
+    --zs-surface: #121821;
+    --zs-surface2: #18212d;
+    --zs-surface3: #212c3b;
+    --zs-border: #263243;
+    --zs-line: #1c2531;
+    --zs-text: #e6edf3;
+    --zs-muted: #8d9cb0;
+    --zs-faint: #5d6c80;
+    --zs-accent: #3b82f6;
+    --zs-accent2: #60a5fa;
+    --zs-accent-soft: rgba(59, 130, 246, .16);
+    --zs-ok: #4ade80;
+    --zs-ok-soft: rgba(34, 197, 94, .14);
+    --zs-bad: #f87171;
+    --zs-bad-soft: rgba(239, 68, 68, .14);
+    --zs-warn: #fbbf24;
+    --zs-font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --zs-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+
+    /* tasmota's colours, the inline styles of the pages use these */
+    --c_bg: #0b0f14;
+    --c_frm: #121821;
+    --c_ttl: #e6edf3;
+    --c_txt: #e6edf3;
+    --c_txtwrn: #fbbf24;
+    --c_txtscc: #4ade80;
+    --c_btn: #2563eb;
+    --c_btnoff: #263243;
+    --c_btntxt: #ffffff;
+    --c_btnhvr: #3b82f6;
+    --c_btnrst: #dc2626;
+    --c_btnrsthvr: #ef4444;
+    --c_btnsv: #16a34a;
+    --c_btnsvhvr: #22c55e;
+    --c_in: #0d131b;
+    --c_intxt: #e6edf3;
+    --c_csl: #070a0f;
+    --c_csltxt: #c9d5e3;
+    --c_tab: #212c3b;
+    --c_tabtxt: #e6edf3;
+}
+
+/* ---------------------------------------------------------------- page */
+
+html {
+    background: var(--zs-bg);
+}
+
+body {
+    margin: 0;
+    padding: 20px 16px 28px;
+    box-sizing: border-box;
+    font-family: var(--zs-font);
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--zs-text);
+    background: radial-gradient(900px 420px at 50% -140px, var(--zs-glow), transparent 70%) no-repeat, var(--zs-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* the column every page is written in */
+body > div[style*='min-width:340px'] {
+    width: 100%;
+    max-width: 460px;
+    min-width: 0 !important;
+    box-sizing: border-box;
+    padding: 0;
+    background: none !important;
+}
+
+/* the console, the zigbee map and the script editors need the room */
+body > div[style*='min-width:340px']:has(textarea:not(.za), #mynetwork) {
+    max-width: 960px;
+}
+
+a {
+    color: var(--zs-accent2);
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--zs-border);
+}
+
+small {
+    color: var(--zs-muted);
+}
+
+/* the module and device names at the top of every page */
+body > div[style*='min-width:340px'] > div:first-child {
+    padding: 6px 0 2px;
+}
+
+body > div[style*='min-width:340px'] > div:first-child::before {
+    content: "";
+    display: block;
+    width: 42px;
+    height: 42px;
+    margin: 2px auto 12px;
+    border-radius: 13px;
+    background: icon(house-signal, #fff) center / 22px no-repeat, linear-gradient(140deg, #3b82f6, #7c3aed);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, .28), inset 0 1px 0 rgba(255, 255, 255, .25);
+}
+
+body > div[style*='min-width:340px'] > div:first-child h3 {
+    margin: 0;
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--zs-muted);
+}
+
+body > div[style*='min-width:340px'] > div:first-child h2 {
+    margin: 4px 0 2px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -.015em;
+    color: var(--zs-text);
+}
+
+body > div[style*='min-width:340px'] > div:first-child h4 {
+    margin: 4px 0 0;
+    font-size: .8rem;
+    font-weight: 500;
+    color: var(--zs-muted);
+}
+
+/* the title of a page, <h3><hr>Title<hr></h3> */
+h3:has(> hr) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 12px;
+    margin: 16px 0 10px;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--zs-muted);
+}
+
+h3 > hr {
+    flex: 1;
+    margin: 0 !important;
+}
+
+h3 > hr ~ span {
+    flex-basis: 100%;
+    margin-top: 6px;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+/* the version at the bottom of every page */
+div[style*='text-align:right;font-size:11px'] {
+    margin-top: 10px;
+    text-align: center !important;
+    font-size: .72rem !important;
+}
+
+div[style*='text-align:right;font-size:11px'] hr {
+    margin: 0 0 12px;
+    border-color: var(--zs-line);
+}
+
+div[style*='text-align:right;font-size:11px'] a {
+    color: var(--zs-faint) !important;
+}
+
+/* ---------------------------------------------------------------- cards */
+
+fieldset {
+    margin: 0 0 10px;
+    padding: 14px 16px 16px;
+    background: var(--zs-surface);
+    border: 1px solid var(--zs-border);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .22);
+}
+
+/* the legend is moved inside the card, as its title */
+legend {
+    float: left;
+    width: 100%;
+    margin: 0 0 6px;
+    padding: 0;
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--zs-muted);
+}
+
+legend + * {
+    clear: both;
+}
+
+legend b {
+    font-weight: 600;
+}
+
+fieldset b {
+    font-weight: 600;
+}
+
+fieldset p {
+    margin: 10px 0;
+}
+
+/* ---------------------------------------------------------------- inputs */
+
+input,
+select,
+textarea {
+    font-family: inherit;
+    font-size: .95rem;
+    color: var(--c_intxt);
+    background: var(--c_in);
+    border: 1px solid var(--zs-border);
+    border-radius: 10px;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+input,
+select {
+    margin: 4px 0 0;
+    padding: 9px 11px;
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+    border-color: #33435a;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--zs-accent);
+    box-shadow: 0 0 0 3px var(--zs-accent-soft);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--zs-faint);
+}
+
+select {
+    cursor: pointer;
+}
+
+input[type=checkbox],
+input[type=radio] {
+    width: 16px;
+    height: 16px;
+    margin: 0 8px 0 0;
+    padding: 0;
+    vertical-align: -3px;
+    accent-color: var(--zs-accent);
+    box-shadow: none;
+    cursor: pointer;
+}
+
+label {
+    cursor: pointer;
+}
+
+input[type=range] {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    accent-color: var(--zs-accent);
+}
+
+input[type=file] {
+    padding: 6px;
+    background: var(--zs-surface2);
+    color: var(--zs-muted);
+}
+
+input[type=file]::file-selector-button {
+    margin-right: 10px;
+    padding: 6px 12px;
+    font: inherit;
+    font-weight: 600;
+    color: var(--zs-text);
+    background: var(--zs-surface3);
+    border: 1px solid var(--zs-border);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+textarea {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px 14px;
+    font-family: var(--zs-mono);
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--c_csltxt);
+    background: var(--c_csl);
+    border-radius: 14px;
+}
+
+/* ---------------------------------------------------------------- buttons */
+
+button {
+    font-family: inherit;
+    font-size: .95rem;
+    font-weight: 600;
+    line-height: 2.75rem;
+    letter-spacing: .01em;
+    color: var(--c_btntxt);
+    background: var(--c_btn);
+    border: 0;
+    border-radius: 12px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1);
+    transition: background-color .15s ease, border-color .15s ease, color .15s ease, filter .15s ease;
+}
+
+button:hover {
+    background: var(--c_btnhvr);
+}
+
+button:active {
+    filter: brightness(.9);
+}
+
+button:focus-visible {
+    outline: 2px solid var(--zs-accent2);
+    outline-offset: 2px;
+}
+
+button:disabled,
+button:disabled:hover {
+    color: var(--zs-muted);
+    background: var(--zs-surface3);
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+.bred {
+    background: var(--c_btnrst);
+}
+
+.bred:hover {
+    background: var(--c_btnrsthvr);
+}
+
+.bgrn {
+    background: var(--c_btnsv);
+}
+
+.bgrn:hover {
+    background: var(--c_btnsvhvr);
+}
+
+/* an icon in front of the text of a button, the icon is --i */
+button[name=save]::before,
+form[action=u1] button::before,
+form[action^=u2] button::before,
+button[onclick*=zbj]::before,
+form[action=zbman][method=post] button::before,
+form.zt[method=get] button::before {
+    content: "";
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-right: .55em;
+    vertical-align: -.14em;
+    background: currentColor;
+    -webkit-mask: var(--i) center / contain no-repeat;
+    mask: var(--i) center / contain no-repeat;
+}
+
+button[name=save] { --i: icon(floppy-disk) }
+form[action=u1] button,
+form[action^=u2] button { --i: icon(arrow-up-from-bracket) }
+button[onclick*=zbj] { --i: icon(link) }
+
+/* ---------------------------------------------------------------- menus */
+
+/* the buttons that open another page, <p></p><form method='get'><button>Page</button></form>,
+   are drawn as rows of a menu, with an icon in front and a chevron behind */
+p + form:not(.zt):not([method=post]) > button:last-child,
+a > button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 14px 0 13px;
+    font-weight: 500;
+    text-align: left;
+    color: var(--zs-text);
+    background: var(--zs-surface);
+    border: 1px solid var(--zs-border);
+    box-shadow: none;
+}
+
+p + form:not(.zt):not([method=post]) > button:last-child:hover,
+a > button:hover {
+    background: var(--zs-surface2);
+    border-color: #33435a;
+}
+
+p + form:not(.zt):not([method=post]) > button:last-child::before,
+a > button::before {
+    content: "";
+    flex: none;
+    width: 18px;
+    height: 18px;
+    background: var(--zs-accent2);
+    -webkit-mask: var(--i) center / contain no-repeat;
+    mask: var(--i) center / contain no-repeat;
+}
+
+p + form:not(.zt):not([method=post]) > button:last-child::after,
+a > button::after {
+    content: "";
+    flex: none;
+    width: 11px;
+    height: 11px;
+    margin-left: auto;
+    background: var(--zs-faint);
+    -webkit-mask: icon(chevron-right) center / contain no-repeat;
+    mask: icon(chevron-right) center / contain no-repeat;
+}
+
+/* restart and reset configuration */
+p + form:not(.zt):not([method=post]) > button.bred:last-child {
+    color: var(--zs-bad);
+    background: var(--zs-surface);
+}
+
+p + form:not(.zt):not([method=post]) > button.bred:last-child:hover {
+    background: var(--zs-bad-soft);
+    border-color: rgba(239, 68, 68, .45);
+}
+
+p + form:not(.zt):not([method=post]) > button.bred:last-child::before {
+    background: var(--zs-bad);
+}
+
+/* the icons of the menus, any other page has a cube */
+p + form,
+a { --i: icon(cube) }
+form[action='.'] { --i: icon(house) }
+button[name=rst] { --i: icon(power-off) }
+button[name=non] { --i: icon(rotate-left) }
+form[action=cn] { --i: icon(gear) }
+form[action=in] { --i: icon(circle-info) }
+form[action=up] { --i: icon(cloud-arrow-up) }
+form[action=mn] { --i: icon(screwdriver-wrench) }
+form[action=md] { --i: icon(microchip) }
+form[action=wi] { --i: icon(wifi) }
+form[action=lg] { --i: icon(file-lines) }
+form[action=co] { --i: icon(sliders) }
+form[action=tp] { --i: icon(pen-to-square) }
+form[action=dl] { --i: icon(download) }
+form[action=rs] { --i: icon(upload) }
+form[action=cs] { --i: icon(terminal) }
+form[action=mq] { --i: icon(tower-broadcast) }
+form[action=tm] { --i: icon(clock) }
+form[action=dm] { --i: icon(server) }
+form[action=kn] { --i: icon(network-wired) }
+form[action=ble] { --i: icon(bluetooth-b) }
+form[action=gv] { --i: icon(eye) }
+form[action=bc] { --i: icon(code) }
+form[action=s10] { --i: icon(file-code) }
+form[action=ufsd] { --i: icon(folder-open) }
+form[action=ext] { --i: icon(puzzle-piece) }
+form[action=ac],
+form[action='/ac'] { --i: icon(wand-magic-sparkles) }
+form[action=part_wiz] { --i: icon(hard-drive) }
+form[action=zbr] { --i: icon(arrows-rotate) }
+form[action=zbman] { --i: icon(circle-nodes) }
+a[href=zbm] { --i: icon(diagram-project) }
+
+/* ---------------------------------------------------------------- main page */
+
+/* the sensors, refreshed every few seconds. nothing in here is animated, it is replaced on
+   every refresh */
+#l1:has(th, td) {
+    margin: 6px 0 12px;
+    padding: 6px 16px !important;
+    background: var(--zs-surface);
+    border: 1px solid var(--zs-border);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .22);
+}
+
+#l1 table {
+    border-collapse: collapse;
+}
+
+#l1 th {
+    padding: 8px 12px 8px 0;
+    font-weight: 500;
+    text-align: left;
+    color: var(--zs-muted);
+}
+
+#l1 td {
+    padding: 8px 0;
+    font-variant-numeric: tabular-nums;
+}
+
+#l1 tr:has(> th) + tr:has(> th) > * {
+    border-top: 1px solid var(--zs-line);
+}
+
+#l1 td[colspan] hr {
+    margin: 4px 0;
+}
+
+/* the status line, wifi and the stickers at the top */
+#l1 > div[style*='position:absolute'] {
+    padding: 2px;
+    color: var(--zs-muted);
+}
+
+#l1 span[style*='border-style:solid'] {
+    margin: 0 0 0 4px !important;
+    padding: 1px 6px !important;
+    color: var(--zs-muted);
+    background: var(--zs-surface2);
+    border-color: var(--zs-border) !important;
+    border-radius: 6px !important;
+}
+
+/* the power state, ON or OFF, under the sensors */
+#l1 td[style*='font-weight:bold'] {
+    color: var(--zs-text);
+    letter-spacing: -.02em;
+}
+
+#l1 td[style*='font-weight:normal'] {
+    color: var(--zs-faint);
+    letter-spacing: -.02em;
+}
+
+/* the power buttons. tasmota sets their background to var(--c_btn) when on and to
+   var(--c_btnoff) when off, so both colours are set on the buttons */
+td > button[id^=o][onclick] {
+    --c_btn: linear-gradient(135deg, #2563eb, #4f46e5);
+    --c_btnoff: var(--zs-surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    line-height: 3rem;
+    background: var(--c_btn);
+    border-radius: 14px;
+}
+
+td > button[id^=o][onclick]:hover {
+    filter: brightness(1.15);
+}
+
+td > button[id^=o][onclick][style*=btnoff] {
+    color: var(--zs-muted);
+    box-shadow: inset 0 0 0 1px var(--zs-border);
+}
+
+td > button[id^=o][onclick]::before {
+    content: "";
+    flex: none;
+    width: 16px;
+    height: 16px;
+    background: currentColor;
+    -webkit-mask: icon(power-off) center / contain no-repeat;
+    mask: icon(power-off) center / contain no-repeat;
+}
+
+/* the light sliders, the gradient is drawn by tasmota behind the slider */
+div.r {
+    margin: 8px 2px;
+    padding: 3px 4px;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1);
+}
+
+div.r input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    width: 100%;
+    height: 22px;
+    margin: 0;
+    background: transparent;
+}
+
+div.r input[type=range]::-webkit-slider-runnable-track {
+    height: 22px;
+    background: transparent;
+}
+
+div.r input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    background: #fff;
+    border: 0;
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .5), 0 0 0 3px rgba(0, 0, 0, .2);
+}
+
+div.r input[type=range]::-moz-range-track {
+    background: transparent;
+}
+
+div.r input[type=range]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    background: #fff;
+    border: 0;
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .5), 0 0 0 3px rgba(0, 0, 0, .2);
+}
+
+/* the zigbee devices */
+#l1 tr.ztd > td {
+    padding-top: 9px;
+    border-top: 1px solid var(--zs-line);
+}
+
+#l1 tr.ztd:first-child > td {
+    border-top: 0;
+}
+
+#l1 tr.ztd b {
+    font-weight: 600;
+}
+
+#l1 tr.htr > td[colspan] {
+    padding: 0 0 8px;
+    font-size: .85rem;
+    color: var(--zs-muted);
+}
+
+#l1 .si i {
+    background-color: var(--zs-accent2);
+}
+
+#l1 div[style*='color:#aaa'] {
+    color: var(--zs-faint) !important;
+}
+
+#l1 td[colspan] > button {
+    margin: 4px 0;
+}
+
+/* ---------------------------------------------------------------- other pages */
+
+/* information */
+#i {
+    margin: 4px 0 12px;
+    padding: 6px 16px;
+    background: var(--zs-surface);
+    border: 1px solid var(--zs-border);
+    border-radius: 16px;
+}
+
+#i table {
+    border-collapse: collapse;
+}
+
+#i th {
+    padding: 7px 14px 7px 0;
+    font-weight: 500;
+    text-align: left;
+    vertical-align: top;
+    white-space: nowrap;
+    color: var(--zs-muted);
+}
+
+#i td {
+    padding: 7px 0;
+    overflow-wrap: anywhere;
+}
+
+#i tr + tr > * {
+    border-top: 1px solid var(--zs-line);
+}
+
+/* console */
+textarea#t1 {
+    height: 360px;
+    margin-top: 6px;
+    resize: vertical;
+}
+
+input#c1 {
+    font-family: var(--zs-mono);
+    font-size: 13px;
+}
+
+/* extension manager */
+fieldset button.btn-small {
+    padding: 0 10px;
+    font-size: .8rem;
+    line-height: 1.9rem;
+    border-radius: 8px;
+}
+
+fieldset .ext-store-item {
+    border: 1px solid var(--zs-border);
+    border-radius: 12px;
+}
+
+/* ---------------------------------------------------------------- zigbee manager */
+
+form.zt[method=get] {
+    gap: 4px;
+    padding: 4px;
+    background: var(--zs-surface);
+    border: 1px solid var(--zs-border);
+    border-radius: 14px;
+}
+
+form.zt[method=get] button {
+    line-height: 2.3rem;
+    font-size: .9rem;
+    color: var(--zs-muted);
+    background: transparent;
+    border-radius: 10px;
+    box-shadow: none;
+}
+
+form.zt[method=get] button:hover {
+    color: var(--zs-text);
+    background: var(--zs-surface2);
+}
+
+form.zt[method=get] button.zc {
+    color: #fff;
+    background: var(--c_btn);
+}
+
+form.zt[method=get] button[value=''] { --i: icon(list) }
+form.zt[method=get] button[value=schemas] { --i: icon(file-code) }
+form.zt[method=get] button[value=settings] { --i: icon(sliders) }
+
+form[action=zbman][method=post] button[value=poll] { --i: icon(arrows-rotate) }
+form[action=zbman][method=post] button[value=pull],
+form[action=zbman][method=post] button:disabled { --i: icon(cloud-arrow-down) }
+form[action=zbman][method=post] button[value=rename] { --i: icon(pen) }
+form[action=zbman][method=post] button[value=add],
+form[action=zbman][method=post] button[value=add_mapping] { --i: icon(plus) }
+form[action=zbman][method=post] button[value=reset],
+form[action=zbman][method=post] button[value=reset_schemas],
+form[action=zbman][method=post] button[value=reset_settings] { --i: icon(rotate-left) }
+form[action=zbman][method=post] button[value^=remove] { --i: icon(trash) }
+form[action=zbman][method=post] button[value=add_schema] { --i: icon(upload) }
+form[action=zbman][method=post] button[value=save_settings] { --i: icon(floppy-disk) }
+
+form.zt[method=post] button:not(:disabled) {
+    color: var(--zs-text);
+    background: var(--zs-surface);
+    border: 1px solid var(--zs-border);
+    box-shadow: none;
+}
+
+form.zt[method=post] button:not(:disabled):hover {
+    background: var(--zs-surface2);
+}
+
+div.zd {
+    margin: 10px 0;
+    padding: 11px 13px;
+    background: var(--zs-surface2);
+    border: 1px solid var(--zs-border);
+    border-radius: 12px;
+}
+
+div.zd .zh b {
+    font-size: 1rem;
+}
+
+span.zs {
+    --c_btnsv: var(--zs-ok);
+    padding: 2px 9px;
+    font-size: .72rem;
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--zs-muted);
+    background: rgba(255, 255, 255, .04);
+    border: 1px solid var(--zs-border);
+    border-radius: 999px;
+}
+
+table.zi {
+    margin-top: 6px;
+}
+
+table.zi td {
+    padding: 2px 6px 2px 0;
+}
+
+table.zi td:first-child {
+    opacity: 1;
+    color: var(--zs-muted);
+}
+
+div.zr {
+    gap: 8px;
+    margin-top: 8px;
+}
+
+div.zr input,
+div.zr select {
+    margin: 0;
+}
+
+button.zb {
+    padding: 0 12px;
+    font-size: .85rem;
+    line-height: 2.25rem;
+    border-radius: 10px;
+}
+
+button.zb:not(.bgrn):not(.bred) {
+    color: var(--zs-text);
+    background: var(--zs-surface3);
+    box-shadow: inset 0 0 0 1px var(--zs-border);
+}
+
+button.zb:not(.bgrn):not(.bred):hover {
+    background: #2a3749;
+}
+
+div.zm {
+    --c_btnsv: var(--zs-ok-soft);
+    --c_btnrst: var(--zs-bad-soft);
+    padding: 10px 14px;
+    font-weight: 500;
+    color: var(--zs-text);
+    border: 1px solid var(--zs-border);
+    border-radius: 12px;
+}
+
+div.zm[style*=btnsv] {
+    border-color: rgba(34, 197, 94, .4);
+}
+
+div.zm[style*=btnrst] {
+    border-color: rgba(239, 68, 68, .45);
+}
+
+p.zn {
+    color: var(--zs-muted);
+}
+
+textarea.za {
+    height: 180px;
+    font-family: var(--zs-mono);
+    font-size: 12.5px;
+}
+
+/* ---------------------------------------------------------------- phones */
+
+@media (max-width: 420px) {
+    body {
+        padding: 14px 12px 22px;
+    }
+
+    fieldset,
+    #i {
+        padding-left: 13px;
+        padding-right: 13px;
+    }
+
+    #l1:has(th, td) {
+        padding: 6px 13px !important;
+    }
+}
