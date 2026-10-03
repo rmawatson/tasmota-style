@@ -283,6 +283,11 @@ label {
     cursor: pointer;
 }
 
+/* the checkbox that shows a password, after its label */
+label > b + input[type=checkbox] {
+    margin: 0 0 0 8px;
+}
+
 input[type=range] {
     padding: 0;
     border: 0;
@@ -714,6 +719,10 @@ input#c1 {
 }
 
 /* extension manager */
+fieldset[style*='padding:0 5px'] {
+    padding: 14px 16px 10px !important;
+}
+
 fieldset button.btn-small {
     padding: 0 10px;
     font-size: .8rem;
