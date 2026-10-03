@@ -9,52 +9,38 @@
 
 /* ---------------------------------------------------------------- colours */
 
+/* Tasmota writes its colours, set with the WebColor command, as --c_ variables in every page. The
+   theme's other colours are mixed from them, so every page follows the colours chosen in the
+   Tasmota Style Manager. color-scheme and the shadow for light colours are added by tms.be */
+
 :root {
-    color-scheme: dark;
-    --ts-bg: #0b0f14;
-    --ts-glow: rgba(56, 132, 255, .13);
-    --ts-surface: #121821;
-    --ts-surface2: #18212d;
-    --ts-surface3: #212c3b;
-    --ts-border: #263243;
-    --ts-line: #1c2531;
-    --ts-text: #e6edf3;
-    --ts-muted: #8d9cb0;
-    --ts-faint: #5d6c80;
-    --ts-accent: #3b82f6;
-    --ts-accent2: #60a5fa;
-    --ts-accent-soft: rgba(59, 130, 246, .16);
-    --ts-ok: #4ade80;
-    --ts-ok-soft: rgba(34, 197, 94, .14);
-    --ts-bad: #f87171;
-    --ts-bad-soft: rgba(239, 68, 68, .14);
-    --ts-warn: #fbbf24;
-    --ts-r: 4px;
-    --ts-r-sm: 3px;
+    --ts-bg: var(--c_bg);
+    --ts-surface: var(--c_frm);
+    --ts-surface2: color-mix(in srgb, var(--c_frm) 95%, var(--c_txt));
+    --ts-surface3: color-mix(in srgb, var(--c_frm) 89%, var(--c_txt));
+    --ts-border: color-mix(in srgb, var(--c_frm) 86%, var(--c_txt));
+    --ts-border2: color-mix(in srgb, var(--c_frm) 78%, var(--c_txt));
+    --ts-line: color-mix(in srgb, var(--c_frm) 93%, var(--c_txt));
+    --ts-text: var(--c_txt);
+    --ts-muted: color-mix(in srgb, var(--c_txt) 62%, var(--c_frm));
+    --ts-faint: color-mix(in srgb, var(--c_txt) 40%, var(--c_frm));
+    --ts-accent: var(--c_btn);
+    --ts-accent2: color-mix(in srgb, var(--c_btn) 65%, var(--c_txt));
+    --ts-accent-soft: color-mix(in srgb, var(--c_btn) 22%, transparent);
+    --ts-glow: color-mix(in srgb, var(--c_btn) 13%, transparent);
+    --ts-on: linear-gradient(135deg, var(--c_btn), var(--c_btnhvr));
+    --ts-ok: var(--c_txtscc);
+    --ts-ok-soft: color-mix(in srgb, var(--c_btnsv) 16%, transparent);
+    --ts-ok-line: color-mix(in srgb, var(--c_btnsv) 45%, transparent);
+    --ts-bad: color-mix(in srgb, var(--c_btnrst) 70%, var(--c_txt));
+    --ts-bad-soft: color-mix(in srgb, var(--c_btnrst) 15%, transparent);
+    --ts-bad-line: color-mix(in srgb, var(--c_btnrst) 50%, transparent);
+    --ts-warn: var(--c_txtwrn);
+    --ts-shadow: 0 10px 30px rgba(0, 0, 0, .22);
+    --ts-r: 6px;
+    --ts-r-sm: 4px;
     --ts-font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     --ts-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-
-    /* tasmota's colours, the inline styles of the pages use these */
-    --c_bg: #0b0f14;
-    --c_frm: #121821;
-    --c_ttl: #e6edf3;
-    --c_txt: #e6edf3;
-    --c_txtwrn: #fbbf24;
-    --c_txtscc: #4ade80;
-    --c_btn: #2563eb;
-    --c_btnoff: #263243;
-    --c_btntxt: #ffffff;
-    --c_btnhvr: #3b82f6;
-    --c_btnrst: #dc2626;
-    --c_btnrsthvr: #ef4444;
-    --c_btnsv: #16a34a;
-    --c_btnsvhvr: #22c55e;
-    --c_in: #0d131b;
-    --c_intxt: #e6edf3;
-    --c_csl: #070a0f;
-    --c_csltxt: #c9d5e3;
-    --c_tab: #212c3b;
-    --c_tabtxt: #e6edf3;
 }
 
 /* ---------------------------------------------------------------- page */
@@ -110,6 +96,10 @@ body > div[style*='min-width:340px'] > div:first-child {
     padding: 6px 0 2px;
 }
 
+body > div[style*='min-width:340px'] > div:first-child {
+    position: relative;
+}
+
 body > div[style*='min-width:340px'] > div:first-child::before {
     content: "";
     display: block;
@@ -117,8 +107,20 @@ body > div[style*='min-width:340px'] > div:first-child::before {
     height: 42px;
     margin: 2px auto 12px;
     border-radius: var(--ts-r);
-    background: icon(house-signal, #fff) center / 22px no-repeat, linear-gradient(140deg, #3b82f6, #7c3aed);
-    box-shadow: 0 6px 20px rgba(59, 130, 246, .28), inset 0 1px 0 rgba(255, 255, 255, .25);
+    background: linear-gradient(140deg, var(--c_btn), var(--c_btnhvr));
+    box-shadow: 0 6px 20px var(--ts-accent-soft), inset 0 1px 0 rgba(255, 255, 255, .25);
+}
+
+body > div[style*='min-width:340px'] > div:first-child::after {
+    content: "";
+    position: absolute;
+    top: 18px;
+    left: calc(50% - 11px);
+    width: 22px;
+    height: 22px;
+    background: var(--c_btntxt);
+    -webkit-mask: icon(house-signal) center / contain no-repeat;
+    mask: icon(house-signal) center / contain no-repeat;
 }
 
 body > div[style*='min-width:340px'] > div:first-child h3 {
@@ -195,7 +197,7 @@ fieldset {
     background: var(--ts-surface);
     border: 1px solid var(--ts-border);
     border-radius: var(--ts-r);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, .22);
+    box-shadow: var(--ts-shadow);
 }
 
 /* the legend is moved inside the card, as its title */
@@ -250,7 +252,7 @@ select {
 input:hover,
 select:hover,
 textarea:hover {
-    border-color: #33435a;
+    border-color: var(--ts-border2);
 }
 
 input:focus,
@@ -425,7 +427,7 @@ a > button {
 p + form:not(.zt):not([method=post]) > button:last-child:hover,
 a > button:hover {
     background: var(--ts-surface2);
-    border-color: #33435a;
+    border-color: var(--ts-border2);
 }
 
 p + form:not(.zt):not([method=post]) > button:last-child::before,
@@ -459,7 +461,7 @@ p + form:not(.zt):not([method=post]) > button.bred:last-child {
 
 p + form:not(.zt):not([method=post]) > button.bred:last-child:hover {
     background: var(--ts-bad-soft);
-    border-color: rgba(239, 68, 68, .45);
+    border-color: var(--ts-bad-line);
 }
 
 p + form:not(.zt):not([method=post]) > button.bred:last-child::before {
@@ -499,6 +501,7 @@ form[action='/ac'] { --i: icon(wand-magic-sparkles) }
 form[action=part_wiz] { --i: icon(hard-drive) }
 form[action=zbr] { --i: icon(arrows-rotate) }
 form[action=zbman] { --i: icon(circle-nodes) }
+form[action=tms] { --i: icon(palette) }
 a[href=zbm] { --i: icon(diagram-project) }
 
 /* ---------------------------------------------------------------- main page */
@@ -511,7 +514,7 @@ a[href=zbm] { --i: icon(diagram-project) }
     background: var(--ts-surface);
     border: 1px solid var(--ts-border);
     border-radius: var(--ts-r);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, .22);
+    box-shadow: var(--ts-shadow);
 }
 
 #l1 table {
@@ -565,10 +568,9 @@ a[href=zbm] { --i: icon(diagram-project) }
 }
 
 /* the power buttons. tasmota sets their background to var(--c_btn) when on and to
-   var(--c_btnoff) when off, so both colours are set on the buttons */
+   var(--c_btnoff) when off, the on colour is made a gradient of the button colours */
 td > button[id^=o][onclick] {
-    --c_btn: linear-gradient(135deg, #2563eb, #4f46e5);
-    --c_btnoff: var(--ts-surface2);
+    --c_btn: var(--ts-on);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -602,7 +604,7 @@ div.r {
     margin: 8px 2px;
     padding: 3px 4px;
     border-radius: var(--ts-r);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1);
+    box-shadow: inset 0 0 0 1px var(--ts-border);
 }
 
 div.r input[type=range] {
@@ -737,6 +739,113 @@ fieldset .ext-store-item {
     border-radius: var(--ts-r);
 }
 
+/* ---------------------------------------------------------------- tasmota style manager */
+
+p.tsm {
+    margin: 0 0 12px;
+    padding: 10px 14px;
+    font-weight: 500;
+    text-align: center;
+    background: var(--ts-ok-soft);
+    border: 1px solid var(--ts-ok-line);
+    border-radius: var(--ts-r);
+}
+
+p.tse {
+    background: var(--ts-bad-soft);
+    border-color: var(--ts-bad-line);
+}
+
+/* the presets, a swatch of their colours and their name */
+form.tsp {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+form.tsp button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px;
+    font-weight: 500;
+    line-height: 2.6rem;
+    text-align: left;
+    color: var(--ts-text);
+    background: var(--ts-surface2);
+    border: 1px solid var(--ts-border);
+    box-shadow: none;
+}
+
+form.tsp button:hover {
+    background: var(--ts-surface3);
+    border-color: var(--ts-border2);
+}
+
+form.tsp span {
+    display: flex;
+    flex: none;
+    overflow: hidden;
+    border-radius: var(--ts-r-sm);
+    box-shadow: 0 0 0 1px var(--ts-border2);
+}
+
+form.tsp i {
+    display: block;
+    width: 14px;
+    height: 22px;
+}
+
+form.tsp small {
+    margin-left: auto;
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ts-accent2);
+}
+
+/* the colours, two to a row */
+div.tsg {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 14px;
+    padding: 0;
+}
+
+div.tsg label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: .85rem;
+    color: var(--ts-muted);
+}
+
+div.tsg input[type=color] {
+    flex: none;
+    width: 42px;
+    height: 28px;
+    margin: 0;
+    padding: 2px;
+    background: var(--ts-surface2);
+    border-radius: var(--ts-r-sm);
+    cursor: pointer;
+}
+
+div.tsg input[type=color]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+div.tsg input[type=color]::-webkit-color-swatch {
+    border: 0;
+    border-radius: 2px;
+}
+
+div.tsg input[type=color]::-moz-color-swatch {
+    border: 0;
+    border-radius: 2px;
+}
+
 /* ---------------------------------------------------------------- zigbee manager */
 
 form.zt[method=get] {
@@ -762,7 +871,7 @@ form.zt[method=get] button:hover {
 }
 
 form.zt[method=get] button.zc {
-    color: #fff;
+    color: var(--c_btntxt);
     background: var(--c_btn);
 }
 
@@ -813,7 +922,7 @@ span.zs {
     font-weight: 600;
     white-space: nowrap;
     color: var(--ts-muted);
-    background: rgba(255, 255, 255, .04);
+    background: var(--ts-surface3);
     border: 1px solid var(--ts-border);
     border-radius: var(--ts-r-sm);
 }
@@ -855,7 +964,7 @@ button.zb:not(.bgrn):not(.bred) {
 }
 
 button.zb:not(.bgrn):not(.bred):hover {
-    background: #2a3749;
+    background: var(--ts-border);
 }
 
 div.zm {
@@ -869,11 +978,11 @@ div.zm {
 }
 
 div.zm[style*=btnsv] {
-    border-color: rgba(34, 197, 94, .4);
+    border-color: var(--ts-ok-line);
 }
 
 div.zm[style*=btnrst] {
-    border-color: rgba(239, 68, 68, .45);
+    border-color: var(--ts-bad-line);
 }
 
 p.zn {
