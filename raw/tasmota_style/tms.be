@@ -147,6 +147,7 @@ class TmsManager
             webserver.content_send("</div><br><button name='save' class='button bgrn'>Save</button></form></fieldset>")
         end
         webserver.content_button(webserver.BUTTON_CONFIGURATION)
+        webserver.content_button(webserver.BUTTON_MAIN)
         webserver.content_stop()
     end
 
