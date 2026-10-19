@@ -3,7 +3,6 @@
 
 import string
 import webserver
-import persist
 import json
 
 class TmsPalette
@@ -107,9 +106,179 @@ class TmsPalette
     end
 end
 
+class TmsStore
+    # a json file of the theme's own, in place of tasmota's persist, the same as Zigbee Manager's
+    # ZbmStore without its delayed saves, the theme saves a change straight away to say when it
+    # failed. _persist.json holds the data of every berry extension, every save rewrites it in
+    # place, and tasmota writes {} to it when a write fails, so a power cut, or a save after it came
+    # back empty, can lose all of it. A save here writes <file>.tmp, keeps the file it replaces as
+    # <file>.bak, then renames the .tmp to <file>, so a complete copy is on the file system at every
+    # step. A file that can not be read is kept as <file>.bad, never written over, and the .tmp of a
+    # save that was cut short, or the .bak, is read instead
+
+    static var dir = "/tasmota_style"
+
+    var file
+    var text            # the json in the file, saving the same json again writes nothing
+
+    def init(name)
+        self.file = f"{self.dir}/{name}.json"
+    end
+
+    # a json object from a file, or nil when it is missing or not complete
+    static def read(file_name)
+        var f
+        try
+            f = open(file_name, "r")
+            var value = json.load(f.read())
+            f.close()
+            return isinstance(value, map) ? value : nil
+        except ..
+            if f != nil
+                f.close()
+            end
+            return nil
+        end
+    end
+
+    # the value in the file, or nil when there is none
+    def load()
+        import path
+        var value = self.read(self.file)
+        if value == nil && path.exists(self.file)
+            # kept to look at, the next save would otherwise make it the .bak
+            path.remove(self.file + ".bad")
+            path.rename(self.file, self.file + ".bad")
+            tasmota.log(f"TMS: {self.file} can not be read, it is kept as {self.file}.bad", 1)
+        end
+        if value == nil && (value := self.read(self.file + ".tmp")) != nil
+            # a save that was cut short after writing its .tmp, finished now
+            path.rename(self.file + ".tmp", self.file)
+        end
+        if value == nil && (value := self.read(self.file + ".bak")) != nil
+            tasmota.log(f"TMS: {self.file} is missing, loaded {self.file}.bak", 1)
+        end
+        self.text = value != nil ? json.dump(value) : nil
+        return value
+    end
+
+    # writes the value, unless the file has the same already. Returns false, and leaves the file
+    # as it was, when it can not be written
+    def save(value)
+        import path
+        var text = json.dump(value)
+        if text == self.text
+            return true
+        end
+        var tmp = self.file + ".tmp"
+        var f
+        try
+            if !path.isdir(self.dir)
+                path.mkdir(self.dir)
+            end
+            f = open(tmp, "w")
+            f.write(text)
+            f.close()
+            f = nil
+            # the file being replaced is kept as the .bak
+            if path.exists(self.file)
+                path.remove(self.file + ".bak")
+                if !path.rename(self.file, self.file + ".bak")
+                    raise "io_error", f"can not rename {self.file}"
+                end
+            end
+            if !path.rename(tmp, self.file)
+                raise "io_error", f"can not rename {tmp}"
+            end
+        except .. as e, m
+            if f != nil
+                f.close()
+            end
+            tasmota.log(f"TMS: unable to save {self.file} - {e} {m}", 1)
+            return false
+        end
+        self.text = text
+        return true
+    end
+end
+
+class TmsData
+    # the theme's own settings, in /tasmota_style/settings.json rather than tasmota's persist: the
+    # colours there were before the theme (colors_before), the theme's colours while it is stopped
+    # (colors) and the style of the menu buttons (buttons). A change is written straight away
+
+    static var store = nil
+    static var values = {}
+    static var persist_keys = {"tms_colors_before": "colors_before", "tms_colors": "colors", "tms_buttons": "buttons"}
+
+    static def load()
+        import persist
+        _class.store = TmsStore("settings")
+        var values = _class.store.load()
+        if values == nil
+            values = {}
+        end
+        # what earlier versions kept in persist is moved here, and removed from persist once it is
+        # saved. persist only has it again when an older version saved it since, so it is newer
+        var moved = []
+        for key : _class.persist_keys.keys()
+            if persist.contains(key)
+                var value = persist.find(key)
+                if value != nil
+                    values[_class.persist_keys[key]] = value
+                else
+                    values.remove(_class.persist_keys[key])
+                end
+                moved.push(key)
+            end
+        end
+        _class.values = values
+        if size(moved) && _class.store.save(values)
+            for key : moved
+                persist.remove(key)
+            end
+            try
+                persist.save()
+            except .. as e, m
+                tasmota.log(f"TMS: unable to save persist - {e} {m}", 1)
+            end
+            tasmota.log(f"TMS: moved {moved.concat(', ')} from persist to {_class.store.file}", 2)
+        end
+    end
+
+    static def find(name, default)
+        return _class.values.find(name, default)
+    end
+
+    static def contains(name)
+        return _class.values.contains(name)
+    end
+
+    # sets the values in changes, nil removes one, and writes them. When they can not be written
+    # nothing is changed, and it returns false
+    static def set(changes)
+        var values = {}
+        for name : _class.values.keys()
+            values[name] = _class.values[name]
+        end
+        for name : changes.keys()
+            if changes[name] == nil
+                values.remove(name)
+            else
+                values[name] = changes[name]
+            end
+        end
+        if !_class.store.save(values)
+            return false
+        end
+        _class.values = values
+        return true
+    end
+end
+
 class TmsButtons
     # the styles of the menu rows. Each is a file in the tapp, btn_<style>.css, added to the end of
-    # the stylesheet, Plain has none. The style in use is kept in persist
+    # the stylesheet, Plain has none. The style in use is kept in TmsData
 
     static var styles = [["edge", "Accent edge"], ["tinted", "Tinted"], ["solid", "Solid"], ["tiles", "Icon tiles"],
                          ["fade", "Fade"], ["plain", "Plain"]]
@@ -125,14 +294,14 @@ class TmsButtons
     end
 
     static def current()
-        var style = persist.find("tms_buttons")
+        var style = TmsData.find("buttons")
         return _class.name(style) != nil ? style : _class.default_style
     end
 
+    # raises io_error when it can not be saved, see TmsSettings.error_message
     static def set(style)
-        if persist.find("tms_buttons") != style
-            persist.tms_buttons = style
-            persist.save()
+        if TmsData.find("buttons") != style && !TmsData.set({"buttons": style})
+            raise "io_error", "write failed"
         end
     end
 end
@@ -151,7 +320,7 @@ class TmsSettings
 
     # the presets, and the colours there were before Tasmota Style when they are not one of them
     static def presets()
-        var before = persist.find("tms_colors_before")
+        var before = TmsData.find("colors_before")
         if TmsPalette.valid_list(before) && TmsPalette.preset_name(before) == nil
             return TmsPalette.presets + [[_class.before_name, before]]
         end
@@ -225,8 +394,8 @@ class TmsSettings
         return [f"Menu buttons: {TmsButtons.name(found)}", true]
     end
 
-    # the message for an error. persist.save() raises io_error when it can not write _persist.json,
-    # most often because the file system is full
+    # the message for an error. A setting that can not be saved raises io_error, most often because
+    # the file system is full
     static def error_message(e, m)
         if e == "io_error"
             return f"Unable to save the settings, {m}. The file system may be full, Tools > Manage File System shows its free space"
@@ -392,7 +561,7 @@ class TmsCommands
         tasmota.add_cmd("TsmImport", _class.guarded(_class.load))
     end
 
-    # the command, with an error it raises, such as a failed persist.save(), logged and answered with Error
+    # the command, with an error it raises, such as a setting that can not be saved, logged and answered with Error
     static def guarded(command)
         return def (cmd, idx, payload, payload_json)
             try
@@ -698,7 +867,7 @@ class TmsExtension
     # the rest of the line. The WebCanvas there was before is put back when the extension stops.
     #
     # The colours are Tasmota's own, set with WebColor. The colours there were before are kept in
-    # persist and put back when the extension stops, the theme's colours are kept until it starts again.
+    # TmsData and put back when the extension stops, the theme's colours are kept until it starts again.
 
     static var url = "/tms.css"
     static var link = "}</style><link rel=stylesheet href=/tms.css><style>:root{--tms:1"
@@ -718,6 +887,7 @@ class TmsExtension
         self.archive = string.endswith(wd, "#") ? wd[0..-2] : wd
         self.routes_added = false
         self.manager = TmsManager()
+        TmsData.load()
         tasmota.add_driver(self)
         TmsCommands.add()
         # tasmota only sends web_add_handler once, when the web server starts. if the extension
@@ -765,7 +935,7 @@ class TmsExtension
     # ---------------------------------------------------------------- WebColor
 
     def apply_colors()
-        if persist.contains("tms_colors_before")        # applied before the device restarted
+        if TmsData.contains("colors_before")        # applied before the device restarted
             return
         end
         var before = TmsPalette.colors()
@@ -773,31 +943,36 @@ class TmsExtension
             tasmota.log("TMS: unable to read WebColor", 1)
             return
         end
-        var colors = persist.find("tms_colors")
+        var colors = TmsData.find("colors")
         if !TmsPalette.valid_list(colors)
             colors = TmsPalette.preset(TmsPalette.default_preset)
         end
-        persist.tms_colors_before = before
-        persist.save()
+        # the colours there are now could not be put back after a restart without them saved
+        if !TmsData.set({"colors_before": before})
+            tasmota.log("TMS: unable to save the colours there are now, the theme's colours are not set", 1)
+            return
+        end
         if !TmsPalette.set_colors(colors)
             tasmota.log("TMS: unable to set WebColor", 1)
         end
     end
 
     def restore_colors()
-        var before = persist.find("tms_colors_before")
+        var before = TmsData.find("colors_before")
         if before == nil
             return
         end
+        var changes = {"colors_before": nil}
         var colors = TmsPalette.colors()
         if colors != nil
-            persist.tms_colors = colors
+            changes["colors"] = colors
         end
         if TmsPalette.valid_list(before) && !TmsPalette.set_colors(before)
             tasmota.log("TMS: unable to restore WebColor", 1)
         end
-        persist.remove("tms_colors_before")
-        persist.save()
+        if !TmsData.set(changes)
+            tasmota.log("TMS: unable to save the theme's colours", 1)
+        end
     end
 
     # ---------------------------------------------------------------- WebCanvas

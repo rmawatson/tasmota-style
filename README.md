@@ -88,7 +88,7 @@ Change them in Configuration > Tasmota Style Manager:
   Before Tasmota Style. The preset in use is marked Current.
 - **Menu buttons** sets the style of the menu rows (Configuration, Information, ...): Accent edge, Tinted,
   Solid, Icon tiles, Fade or Plain. Each takes its colours from the button colours, and Restart and Reset from
-  the reset button colours. The style is kept in `persist` as `tms_buttons`.
+  the reset button colours. The style is saved with the theme's settings, see [Notes](#notes).
 - **Colours** shows the 20 colours with a colour picker each, Save sets them.
 - **Export and import** copies the colours and menu buttons to another device, see
   [Export and import](#export-and-import).
@@ -212,12 +212,17 @@ the `--c_bg`, `--c_btn`, ... variables Tasmota writes with the `WebColor` colour
   shows `TMS: unable to set WebCanvas, the settings have no room for it. The theme is not shown`.
 - Setting `WebCanvas` while the theme runs removes the theme until the extension starts again. It then keeps
   your new value in front of the link, to put back when it stops. The theme draws its own background over it.
-- The colours from before the theme are kept in `persist` as `tms_colors_before`, and the theme's colours as
-  `tms_colors` while it is stopped.
-- When Tasmota can not write `persist` to `_persist.json`, most often because the file system is full, the
-  Tasmota Style Manager shows `Unable to save the settings, write failed`. Tasmota's `persist.save()` then writes
-  `{}` to the file, and the values of every extension are only in memory. Free some space, and run
-  `persist.save(true)` in the Berry Scripting console before restarting.
+- The theme's settings are kept in `/tasmota_style/settings.json`: the colours from before the theme
+  (`colors_before`), the theme's colours while it is stopped (`colors`) and the menu button style (`buttons`).
+  They are not kept in Tasmota's `persist` (`_persist.json`), one file for every Berry extension that the next
+  save of any extension writes over when it was lost or cut short, as a power cut can do. A save writes
+  `settings.json.tmp` first, keeps the file it replaces as `settings.json.bak`, then renames the `.tmp`, so there is
+  a complete copy at every step. A file that can not be read is kept as `settings.json.bad`, and the `.bak` is read
+  instead. The first time this version starts it moves `tms_colors_before`, `tms_colors` and `tms_buttons` out of
+  `persist` into the file.
+- When a setting can not be saved, most often because the file system is full, the Tasmota Style Manager shows
+  `Unable to save the settings, write failed`, the Tsm commands answer with an error, and the setting stays as it
+  was.
 - If the tapp is deleted from the file system without stopping it first, the link stays in `WebCanvas` and
   the theme's colours stay set. The stylesheet is then not found, and the pages are Tasmota's own with those
   colours. `WebCanvas 0` removes the link, `WebColor 0` sets Tasmota's default colours.
